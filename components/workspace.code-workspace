@@ -1,0 +1,29 @@
+{
+	"folders": [
+		{
+			"path": "..\\..\\..\\nodejs"
+		},
+		{
+			"path": "..\\..\\..\\HNG TASK\\plugin-repo\\zc_plugin_tools"
+		},
+		{
+			"path": "..\\..\\..\\HNG TASK\\plugin-channels\\zc_plugin_channels"
+		},
+		{
+			"path": "..\\..\\..\\..\\Downloads\\CSC 293 Practical- Group 9"
+		},
+		{
+			"path": "..\\..\\..\\HNG TASK\\channelfiles"
+		},
+		{
+			"path": "..\\..\\..\\my-wave-portal"
+		},
+		{
+			"path": "..\\..\\..\\HNG TASK\\plugin-channels\\zc_main"
+		},
+		{
+			"path": ".."
+		}
+	],
+	"settings": {}
+}
