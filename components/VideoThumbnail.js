@@ -9,24 +9,39 @@ import { db } from "../firebaseconfig/firebase";
 function VideoThumbnail({ name, userPhoto, ytid, vid, showDelete, uid }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userData, setUserData] = useState(null);
+  const [thumbnail, setThumbnail] = useState(null)
+
+  // useEffect(async () => {
+  //   if (uid) {
+  //     const docRef = doc(db, "users", uid);
+  //     const docSnap = await getDoc(docRef);
+
+  //     if (docSnap.exists()) {
+  //       setUserData(docSnap.data().videosUploaded);
+  //     } else {
+  //       console.log("No such document!");
+  //     }
+  //   }
+  // }, [uid]);
 
   useEffect(async () => {
-    if (uid) {
-      const docRef = doc(db, "users", uid);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        console.log(docSnap.data().videosUploaded);
-        setUserData(docSnap.data().videosUploaded);
-      } else {
-        console.log("No such document!");
-      }
+    const docRef = doc(db, "users", vid)
+    const docSnap = await getDoc(docRef)
+    if (docSnap.exists()) {
+      console.log(docSnap.data)
     }
-  }, [uid]);
+  })
   return (
     <div className="w30 m-5 flex flex-col relative">
       <Link href={`/videopage/${ytid}?vid=${vid}`}>
-        <a className=" w-full border border-red-400 h-28 mb-2 relative"></a>
+        <a className=" w-full border h-28 mb-2 relative">
+
+          <img
+            src="http://pngimg.com/uploads/youtube/youtube_PNG15.png"
+            className="h-full m-auto"
+            alt=""
+          />
+        </a>
       </Link>
       <div className=" flex items-center">
         {userPhoto ? (

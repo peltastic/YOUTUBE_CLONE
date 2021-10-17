@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { doc, deleteDoc, updateDoc, deleteField } from "firebase/firestore";
-import {db} from "../firebaseconfig/firebase"
+import { db, storage } from "../firebaseconfig/firebase";
+import { getStorage, ref, deleteObject } from "firebase/storage";
 
 function DeleteVideo({ ytid, vid, uid, videosUploadedCount }) {
   const [showModal, setShowModal] = useState(false);
@@ -17,10 +18,14 @@ function DeleteVideo({ ytid, vid, uid, videosUploadedCount }) {
     await updateDoc(docRef, {
       videosUploaded: videosUploadedCount - 1,
     });
+    const deleteStorageRef = ref(storage, `${uid}/${vid}`);
+    deleteObject(deleteStorageRef);
   };
   return (
     <div
-      className={`transition-all p-0 cursor-pointer bg-gray-100 ${showModal ? "w-12" : "w-0"}`}
+      className={`transition-all p-0 cursor-pointer bg-gray-100 ${
+        showModal ? "w-12" : "w-0"
+      }`}
       onClick={deleteVideoData}
     >
       <p className={`text-sm ${showModal ? "p-1" : " none hidden"}`}>Delete</p>

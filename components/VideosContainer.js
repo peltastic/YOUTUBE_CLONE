@@ -1,12 +1,8 @@
 import { useState, useEffect } from "react";
 import { db } from "../firebaseconfig/firebase";
 import VideoThumbnail from "./VideoThumbnail";
-import {
-  onSnapshot,
-  query,
-  collection,
-  where,
-} from "firebase/firestore";
+import VideoPreloader from "./VideoPreloader";
+import { onSnapshot, query, collection, where } from "firebase/firestore";
 
 function VideosContainer() {
   const [videosData, setVideosData] = useState(null);
@@ -20,24 +16,41 @@ function VideosContainer() {
       setVideosData(videos);
     });
 
-    return () => { unsubscribe()}
+    return () => {
+      unsubscribe();
+    };
   }, []);
   return (
     <div className="flex border w84 flex-wrap p-6">
-      {videosData
-        ? videosData.map((item, index) => {
-            return (
-              <VideoThumbnail
-                key={index}
-                name={item.videoName}
-                vidUrl={item.url}
-                ytid={item.ytid}
-                vid={item.vid}
-                userPhoto={item.userPhoto}
-              />
-            );
-          })
-        : null}
+      {videosData ? (
+        videosData.map((item, index) => {
+          return (
+            <VideoThumbnail
+              key={index}
+              name={item.videoName}
+              vidUrl={item.url}
+              ytid={item.ytid}
+              vid={item.vid}
+              userPhoto={item.userPhoto}
+            />
+          );
+        })
+      ) : (
+        <>
+          <VideoPreloader />
+          <VideoPreloader />
+          <VideoPreloader />
+          <VideoPreloader />
+          <VideoPreloader />
+          <VideoPreloader />
+          <VideoPreloader />
+          <VideoPreloader />
+          <VideoPreloader />
+          <VideoPreloader />
+          <VideoPreloader />
+          <VideoPreloader />
+        </>
+      )}
     </div>
   );
 }

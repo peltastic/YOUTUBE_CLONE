@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import Header from "../components/Header";
-import { useContext } from "react";
+import React, { useContext } from "react";
 import Image from "next/image";
 import { AuthCheckContext } from "../components/AuthCheck";
 import {
@@ -13,15 +13,15 @@ import {
   getDoc,
 } from "firebase/firestore";
 import { db } from "../firebaseconfig/firebase";
-import {} from "firebase/firestore";
 
 import Backdrop from "../components/Backdrop";
 import AddVideoModal from "../components/AddVideoModal";
 import VideoThumbnail from "../components/VideoThumbnail";
+import VideoPreloader from "../components/VideoPreloader";
 
 function myvideos() {
   const [showModal, setShowModal] = useState(false);
-  const [videoData, setVideoData] = useState(null);
+  const [videoData, setVideoData] = useState([]);
   const [ytid, setYtid] = useState(null);
   const { uid, userPhoto, user } = useContext(AuthCheckContext);
 
@@ -37,7 +37,6 @@ function myvideos() {
     if (docSnap.exists()) {
       const data = docSnap.data();
       const q = query(collection(db, data.ytid), where("isVideo", "==", true));
-      console.log(q);
       onSnapshot(q, (querySnapshot) => {
         const data = [];
         querySnapshot.forEach((doc) => {
@@ -46,6 +45,7 @@ function myvideos() {
         setVideoData(data);
       });
       setYtid(data.ytid);
+      // console.log(videoData.length)
     } else {
       // doc.data() will be undefined in this case
       console.log("No such document!");
@@ -83,19 +83,22 @@ function myvideos() {
             <button>Videos</button>
           </div>
           <div className="flex w-full border p-2">
-            {videoData
-              ? videoData.map((item, index) => (
-                  <VideoThumbnail
-                    key={index}
-                    name={item.videoname}
-                    vidUrl={item.url}
-                    ytid={ytid}
-                    vid={item.vid}
-                    uid={uid}
-                    showDelete
-                  />
-                ))
-              : null}
+            {/* <VideoPreloader /> */}
+            {videoData.length > 0 ? (
+              videoData.map((item, index) => (
+                <VideoThumbnail
+                  name={item.videoname}
+                  vidUrl={item.url}
+                  ytid={ytid}
+                  vid={item.vid}
+                  uid={uid}
+                  key={index}
+                  showDelete
+                />
+              ))
+            ) : (
+              <p>No videos Posted yet</p>
+            )}
           </div>
           {/*  */}
         </div>

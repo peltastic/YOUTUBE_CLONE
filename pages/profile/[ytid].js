@@ -4,6 +4,7 @@ import Image from "next/image";
 import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import { AuthCheckContext } from "../../components/AuthCheck";
+import VideoPreloader from "../../components/VideoPreloader";
 import {
   collection,
   query,
@@ -168,15 +169,22 @@ function Profile() {
           <div className="flex w-full border p-2">
             {videoData
               ? videoData.map((item, index) => (
-                  <VideoThumbnail
+                <>
+                <VideoThumbnail
                     key={index}
                     name={item.videoname}
                     vidUrl={item.url}
                     ytid={ytid}
                     vid={item.vid}
                   />
+                </>            
                 ))
-              : null}
+              : <>
+              <VideoPreloader />
+              <VideoPreloader />
+              <VideoPreloader />
+              <VideoPreloader />
+              </>}
           </div>
           {/*  */}
         </div>

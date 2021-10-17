@@ -3,7 +3,8 @@ module.exports = {
   images: {
     domains: [
       "1.bp.blogspot.com",
-      "lh3.googleusercontent.com"
+      "lh3.googleusercontent.com",
+      "pngimg.com"
     ]
   }
 }
