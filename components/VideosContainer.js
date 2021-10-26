@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { db } from "../firebaseconfig/firebase";
-import VideoThumbnail from "./VideoThumbnail";
+import VidThumbnail from "./VidThumbnail";
 import VideoPreloader from "./VideoPreloader";
 import { onSnapshot, query, collection, where } from "firebase/firestore";
 
@@ -14,6 +14,7 @@ function VideosContainer() {
         videos.push(doc.data());
       });
       setVideosData(videos);
+      console.log(videos)
     });
 
     return () => {
@@ -25,12 +26,13 @@ function VideosContainer() {
       {videosData ? (
         videosData.map((item, index) => {
           return (
-            <VideoThumbnail
+            <VidThumbnail
               key={index}
               name={item.videoName}
               vidUrl={item.url}
               ytid={item.ytid}
               vid={item.vid}
+              thumbnail={item.thumbnail}
               userPhoto={item.userPhoto}
             />
           );

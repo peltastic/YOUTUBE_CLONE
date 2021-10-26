@@ -16,13 +16,15 @@ import { db } from "../firebaseconfig/firebase";
 
 import Backdrop from "../components/Backdrop";
 import AddVideoModal from "../components/AddVideoModal";
-import VideoThumbnail from "../components/VideoThumbnail";
+import VidThumbnail from "../components/VidThumbnail";
 import VideoPreloader from "../components/VideoPreloader";
+import { TemplateIcon } from "@heroicons/react/solid";
 
 function myvideos() {
   const [showModal, setShowModal] = useState(false);
   const [videoData, setVideoData] = useState([]);
   const [ytid, setYtid] = useState(null);
+  const [unsubscribed, setUnsubscribed] = useState(null);
   const { uid, userPhoto, user } = useContext(AuthCheckContext);
 
   useEffect(() => {
@@ -31,25 +33,37 @@ function myvideos() {
     }
   }, [uid]);
 
+  // useEffect(() => {
+  //   const unsub = onSnapshot(doc(db, "cities", "SF"), (doc) => {
+  //     console.log("Current data: ", doc.data());
+  // });
+  // }, [])
+
   const getUserData = async () => {
     const docRef = doc(db, "users", uid);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
       const data = docSnap.data();
       const q = query(collection(db, data.ytid), where("isVideo", "==", true));
-      onSnapshot(q, (querySnapshot) => {
+       onSnapshot(q, (querySnapshot) => {
         const data = [];
         querySnapshot.forEach((doc) => {
           data.push(doc.data());
         });
         setVideoData(data);
+        console.log(data)
       });
+      // setUnsubscribed(unsub);
       setYtid(data.ytid);
       // console.log(videoData.length)
     } else {
       // doc.data() will be undefined in this case
       console.log("No such document!");
     }
+
+    // return () => {
+    //   unsub();
+    // };
   };
 
   return (
@@ -86,13 +100,15 @@ function myvideos() {
             {/* <VideoPreloader /> */}
             {videoData.length > 0 ? (
               videoData.map((item, index) => (
-                <VideoThumbnail
+                <VidThumbnail
                   name={item.videoname}
                   vidUrl={item.url}
                   ytid={ytid}
                   vid={item.vid}
                   uid={uid}
                   key={index}
+                  thumbnail={item.thumbnail}
+                  IsThumbnail={item.isThumbnail}
                   showDelete
                 />
               ))

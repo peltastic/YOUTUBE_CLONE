@@ -4,7 +4,7 @@ import { uploadBytes, ref, getDownloadURL } from "firebase/storage";
 import { AuthCheckContext } from "./AuthCheck";
 import Spinner from "./Spinner/Spinner";
 import { db } from "../firebaseconfig/firebase";
-import { doc, setDoc, updateDoc, getDoc } from "firebase/firestore";
+import { doc, setDoc, updateDoc, getDoc, onSnapshot } from "firebase/firestore";
 import { FiCheck, FiX } from "react-icons/fi";
 // import Hi from "../assets/options.svg"
 
@@ -19,6 +19,7 @@ function AddVideoModal({ clicked, ytid }) {
     "http://pngimg.com/uploads/youtube/youtube_PNG15.png"
   );
   const [customThumbnail, setCustomThumbnail] = useState(false);
+  const [isThumbnail, setIsThumbnail] = useState(false);
 
   useEffect(() => {
     getUserData();
@@ -33,7 +34,7 @@ function AddVideoModal({ clicked, ytid }) {
     setVideoFile(file);
   };
   const thumbnailFileInput = (e) => {
-    const file = e.target.file[0];
+    const file = e.target.files[0];
     setThumbnail(file);
   };
 
@@ -76,6 +77,7 @@ function AddVideoModal({ clicked, ytid }) {
             ytid: ytid,
             vid: vid,
             userPhoto: userPhoto,
+            isThumbnail: customThumbnail
           },
           { merge: true }
         );
@@ -87,6 +89,7 @@ function AddVideoModal({ clicked, ytid }) {
           ytid: ytid,
           vid: vid,
           userPhoto: userPhoto,
+          isThumbnail: customThumbnail
         })
           .then(() => {
             const docRef = doc(db, "users", uid);
@@ -96,34 +99,59 @@ function AddVideoModal({ clicked, ytid }) {
             });
           })
           .then(() => {
-            setDoc(doc(db, "thumbnail", vid), {
-              thumbnail: thumbnail,
-            });
-          })
-          .then(() => {
             if (customThumbnail) {
-              const storageRef = ref(storage, `thumbnails/${vid}`);
-              return uploadBytes(storageRef, videofile);
-            } else{
-              clicked()
+              customThumbnailReq(vid);
+            } else {
+              NoCustomThumbnailReq(vid);
             }
-          })
-          .then(() => {
-            console.log("Uploaded thumbnail!");
-            return getDownloadURL(ref(storage, `thumbnails/${vid}`));
-          })
-          .then(() => {
-            return getDownloadURL(ref(storage, `thumbnails/${vid}`));
-          })
-          .then (url => {
-            setDoc(doc(db, "thumbnail", vid), {
-              thumbnail: url,
-            });
           })
           .then(() => {
             clicked();
           });
       });
+  };
+
+  const customThumbnailReq = (vid) => {
+    const storageRef = ref(storage, `thumbnails/${vid}`);
+    uploadBytes(storageRef, thumbnail)
+      .then(() => {
+        console.log("Uploaded thumbnail!");
+        return getDownloadURL(ref(storage, `thumbnails/${vid}`));
+      })
+      .then((url) => {
+        setDoc(
+          doc(db, "videos", vid),
+          {
+            thumbnail: url,
+          },
+          { merge: true }
+        ).then(() => {
+          setDoc(
+            doc(db, ytid, vid),
+            {
+              thumbnail: url,
+            },
+            { merge: true }
+          );
+        });
+      });
+  };
+
+  const NoCustomThumbnailReq = async (vid) => {
+    await setDoc(
+      doc(db, "videos", vid),
+      {
+        thumbnail: thumbnail,
+      },
+      { merge: true }
+    );
+    await setDoc(
+      doc(db, ytid, vid),
+      {
+        thumbnail: thumbnail,
+      },
+      { merge: true }
+    );
   };
 
   let loadingImage = null;
@@ -167,19 +195,9 @@ function AddVideoModal({ clicked, ytid }) {
                   setThumbnail(
                     "http://pngimg.com/uploads/youtube/youtube_PNG15.png"
                   );
-                }}
-              />
-            )}
-          </div>
-          <div className=" flex">
-            <p>Auto Generate Video Thumbnail?</p>
-            {thumbnailRequestType === "video" ? (
-              <FiCheck onClick={() => setThumbnailRequestType("default")} />
-            ) : (
-              <FiX
-                onClick={() => {
-                  setThumbnailRequestType("video");
-                  setThumbnail("videoThumbnail");
+                  if (customThumbnail) {
+                    setCustomThumbnail(false);
+                  }
                 }}
               />
             )}

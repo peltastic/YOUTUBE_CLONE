@@ -19,9 +19,20 @@ body {
     width: 84%;
   }
   .trans-center {
-    transform: translate(-50%, -50%)
+    transform: translate(-50%, -50%);
   }
   .background-trans {
     background: rgba(35, 33, 33, 0.66);
   }
+  .h-90vh {
+    height: 90vh;
+  }
+  .w-30n {
+    width: 30%;
+  }
+  
+    .scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+  
 }

@@ -6,40 +6,45 @@ import DeleteVideo from "./DeleteVideo";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebaseconfig/firebase";
 
-function VideoThumbnail({ name, userPhoto, ytid, vid, showDelete, uid }) {
+function VidThumbnail({
+  name,
+  userPhoto,
+  ytid,
+  vid,
+  showDelete,
+  uid,
+  thumbnail,
+  IsThumbnail
+}) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [thumbnail, setThumbnail] = useState(null)
-
-  // useEffect(async () => {
-  //   if (uid) {
-  //     const docRef = doc(db, "users", uid);
-  //     const docSnap = await getDoc(docRef);
-
-  //     if (docSnap.exists()) {
-  //       setUserData(docSnap.data().videosUploaded);
-  //     } else {
-  //       console.log("No such document!");
-  //     }
-  //   }
-  // }, [uid]);
+  const [thumbnailImage, setThumbnailImage] = useState(null);
 
   useEffect(async () => {
-    const docRef = doc(db, "users", vid)
-    const docSnap = await getDoc(docRef)
-    if (docSnap.exists()) {
-      console.log(docSnap.data)
-    }
-  })
-  return (
-    <div className="w30 m-5 flex flex-col relative">
-      <Link href={`/videopage/${ytid}?vid=${vid}`}>
-        <a className=" w-full border h-28 mb-2 relative">
+    if (uid) {
+      const docRef = doc(db, "users", uid);
+      const docSnap = await getDoc(docRef);
 
+      if (docSnap.exists()) {
+        setUserData(docSnap.data().videosUploaded);
+      } else {
+        console.log("No such document!");
+      }
+    }
+  }, [uid]);
+
+  return (
+    <div className="w30 m-5 flex flex-col relative ">
+      <Link href={`/videopage/${ytid}?vid=${vid}`}>
+        <a className=" w-full border h-28 mb-2 relative bg-gray-700">
           <img
-            src="http://pngimg.com/uploads/youtube/youtube_PNG15.png"
-            className="h-full m-auto"
+            src={
+              thumbnail
+                ? thumbnail
+                : "http://pngimg.com/uploads/youtube/youtube_PNG15.png"
+            }
             alt=""
+            className="h-full m-auto"
           />
         </a>
       </Link>
@@ -63,6 +68,7 @@ function VideoThumbnail({ name, userPhoto, ytid, vid, showDelete, uid }) {
             vid={vid}
             uid={uid}
             videosUploadedCount={userData}
+            IsThumbnail={IsThumbnail}
           />
         ) : null}
         {showDelete ? (
@@ -79,4 +85,4 @@ function VideoThumbnail({ name, userPhoto, ytid, vid, showDelete, uid }) {
   );
 }
 
-export default VideoThumbnail;
+export default VidThumbnail;

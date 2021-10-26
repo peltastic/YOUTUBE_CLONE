@@ -18,7 +18,7 @@ import {
   deleteField,
 } from "firebase/firestore";
 import { db } from "../../firebaseconfig/firebase";
-import VideoThumbnail from "../../components/VideoThumbnail";
+import VidThumbnail from "../../components/VidThumbnail";
 
 function Profile() {
   const router = useRouter();
@@ -28,9 +28,8 @@ function Profile() {
   const [subscribersNo, setSubscribersNo] = useState(null);
   const [isUser, setIsUser] = useState(true);
   const [isSubscribed, setIsSubscribed] = useState(false);
-  const [updateSubCount, setUpdateSubCount] = useState(false)
+  const [updateSubCount, setUpdateSubCount] = useState(false);
   const { Userytid } = useContext(AuthCheckContext);
-  
 
   useEffect(() => {
     if (ytid) {
@@ -39,8 +38,11 @@ function Profile() {
     }
   }, [ytid, Userytid]);
   useEffect(() => {
-    getSubscribersNo();
-  }, [ytid,Userytid, updateSubCount]);
+    if (ytid) {
+      getSubscribersNo();
+
+    }
+  }, [ytid, updateSubCount]);
   useEffect(() => {
     if (ytid === Userytid) {
       setIsUser(true);
@@ -68,10 +70,10 @@ function Profile() {
   };
 
   const getSubscribersNo = async () => {
-    const docRef = doc(db, ytid, "subscribers");
+    const docRef = doc(db, "subscribers", ytid);
     const docSnap = await getDoc(docRef);
     if (docSnap.exists()) {
-      setSubscribersNo(docSnap.data());
+      setSubscribersNo(docSnap.data().subscribersNo);
       console.log(docSnap.data());
     } else {
       console.log("No such document!");
@@ -100,30 +102,30 @@ function Profile() {
       return;
     }
   };
-  
+
   const onSubscribe = async () => {
     setIsSubscribed(!isSubscribed);
     if (isSubscribed) {
       console.log(subscribersNo);
-      const docRef = doc(db, ytid, "subscribers");
-      const docRef2 = doc(db, "subscribers", ytid)
+      const docRef = doc(db, "subscribers", ytid);
+      const docRef2 = doc(db, "subscribers", ytid);
       await updateDoc(docRef, {
         subscribersNo: subscribersNo.subscribersNo - 1,
       }).then(() => {
-        setUpdateSubCount(!updateSubCount)
-        console.log("done")
-      })
-      console.log(Userytid)
+        setUpdateSubCount(!updateSubCount);
+        console.log("done");
+      });
+      console.log(Userytid);
       await updateDoc(docRef2, {
         [Userytid]: deleteField(),
       });
     } else {
-      const docRef = doc(db, ytid, "subscribers");
+      const docRef = doc(db, "subscribers", ytid);
       await updateDoc(docRef, {
         subscribersNo: subscribersNo.subscribersNo + 1,
       }).then(() => {
-        setUpdateSubCount(!updateSubCount)
-      })
+        setUpdateSubCount(!updateSubCount);
+      });
       await setDoc(
         doc(db, "subscribers", ytid),
         {
@@ -148,8 +150,9 @@ function Profile() {
                 src={userData.profilepic}
                 className="rounded-full"
               />
-              <div className="">
+              <div className="flex flex-col">
                 <p>{userData.username}</p>
+                <p className="text-xs">{`${subscribersNo} ${subscribersNo === 1? "subscriber": "subscribers"}`}</p>
               </div>
               {isUser ? null : (
                 <button
@@ -167,24 +170,24 @@ function Profile() {
             <button>Videos</button>
           </div>
           <div className="flex w-full border p-2">
-            {videoData
-              ? videoData.map((item, index) => (
-                <>
-                <VideoThumbnail
-                    key={index}
-                    name={item.videoname}
-                    vidUrl={item.url}
-                    ytid={ytid}
-                    vid={item.vid}
-                  />
-                </>            
-                ))
-              : <>
-              <VideoPreloader />
-              <VideoPreloader />
-              <VideoPreloader />
-              <VideoPreloader />
-              </>}
+            {videoData ? (
+              videoData.map((item, index) => (
+                <VidThumbnail
+                  key={index}
+                  name={item.videoname}
+                  vidUrl={item.url}
+                  ytid={ytid}
+                  vid={item.vid}
+                />
+              ))
+            ) : (
+              <>
+                <VideoPreloader />
+                <VideoPreloader />
+                <VideoPreloader />
+                <VideoPreloader />
+              </>
+            )}
           </div>
           {/*  */}
         </div>

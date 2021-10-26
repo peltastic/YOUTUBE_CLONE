@@ -50,7 +50,6 @@ const postUserData = async (uid, user, email, ytid, profilepic) => {
     email: email,
     videosUploaded: 0,
     uid: uid,
-    subscribersNo: 0,
     ytid: ytid,
     profilepic: profilepic,
   });
@@ -61,6 +60,7 @@ const createSubscribersData = async (ytid) => {
     doc(db, "subscribers", ytid),
     {
       start: "start",
+      subscribersNo: 0
     },
     { merge: true }
   );  
