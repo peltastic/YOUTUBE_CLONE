@@ -7,6 +7,7 @@ body {
   padding: 0;
   margin: 0;
 }
+
 * {
   box-sizing: border-box;
 }
@@ -15,8 +16,14 @@ body {
   .w30 {
     width: 20%;
   }
+  .w5{
+    width: 5%;
+  }
+  .w11{
+    width: 14%;
+  }
   .w84 {
-    width: 84%;
+    width: 93%;
   }
   .trans-center {
     transform: translate(-50%, -50%);
@@ -30,7 +37,6 @@ body {
   .w-30n {
     width: 30%;
   }
-  
     .scrollbar::-webkit-scrollbar {
       display: none;
     }

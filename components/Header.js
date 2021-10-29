@@ -6,9 +6,9 @@ import { AuthCheckContext } from "./AuthCheck";
 import { SearchIcon } from "@heroicons/react/solid";
 import {signUserIn, signOutUser} from "../Auth/auth"
 
-function Header() {
+function Header({signInStatus}) {
 
-  const { uid, userPhoto } = useContext(AuthCheckContext);
+  const { uid, userPhoto, user } = useContext(AuthCheckContext);
   const [signout, setsignout] = useState(false);
 
 
@@ -29,10 +29,10 @@ function Header() {
         <SearchIcon className="h-8 rounded-r-lg border-2" />
       </div>
 
-      <div className="flex">
-        {signout ? (
-          <button
-            className="text-red-500 font-bold mr-6"
+      <div className="flex relative">
+          {user? <div className={`bg-gray-100 w-20 absolute top-5 right-6 ${signout ? "opacity-1" : "opacity-0"}  transition-all duration-500`}>
+            <button
+            className={`text-red-500 font-bold block  m-auto`}
             onClick={() => {
               signOutUser();
               setsignout(!signout);
@@ -40,7 +40,7 @@ function Header() {
           >
             SIGN OUT
           </button>
-        ) : null}
+          </div>: null}
         {uid && userPhoto ? (
           <Image
             width={30}
@@ -54,7 +54,7 @@ function Header() {
         ) : (
           <button
             onClick={signUserIn}
-            className="border-green-600 border p-0.5 px-1 mx-1 rounded-md"
+            className={`text-green-700 p-0.5 px-1 mx-1 rounded-md ${signInStatus ? "animate-bounce" : ''}`}
           >
             {" "}
             SIGN IN

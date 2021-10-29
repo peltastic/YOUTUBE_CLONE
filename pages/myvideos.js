@@ -17,8 +17,6 @@ import { db } from "../firebaseconfig/firebase";
 import Backdrop from "../components/Backdrop";
 import AddVideoModal from "../components/AddVideoModal";
 import VidThumbnail from "../components/VidThumbnail";
-import VideoPreloader from "../components/VideoPreloader";
-import { TemplateIcon } from "@heroicons/react/solid";
 
 function myvideos() {
   const [showModal, setShowModal] = useState(false);
@@ -32,12 +30,6 @@ function myvideos() {
       getUserData();
     }
   }, [uid]);
-
-  // useEffect(() => {
-  //   const unsub = onSnapshot(doc(db, "cities", "SF"), (doc) => {
-  //     console.log("Current data: ", doc.data());
-  // });
-  // }, [])
 
   const getUserData = async () => {
     const docRef = doc(db, "users", uid);

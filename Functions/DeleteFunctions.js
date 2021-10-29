@@ -15,11 +15,12 @@ export const deleteVideoData = async (
   });
   await deleteDoc(doc(db, ytid, vid));
   await deleteDoc(doc(db, "videos", vid));
+  await deleteDoc(doc(db, "comments", vid));
 
   // Remove the 'capital' field from the document
   const deleteStorageRef = ref(storage, `${uid}/${vid}`);
   deleteObject(deleteStorageRef);
-  console.log(IsThumbnail)
+  console.log(IsThumbnail);
   if (IsThumbnail) {
     const deleteThumbnailStorageRef = ref(storage, `thumbnails/${vid}`);
     deleteObject(deleteThumbnailStorageRef);

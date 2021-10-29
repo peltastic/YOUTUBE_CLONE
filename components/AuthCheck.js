@@ -22,6 +22,8 @@ export const AuthCheckProvider = ({ children }) => {
         getUserData(user.uid);
       } else {
         setUserid(null);
+        setUser(null)
+        setYtid(null)
       }
     });
   }, [uid]);
