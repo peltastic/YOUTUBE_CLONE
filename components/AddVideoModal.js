@@ -6,7 +6,8 @@ import Spinner from "./Spinner/Spinner";
 import { db } from "../firebaseconfig/firebase";
 import { doc, setDoc, updateDoc, getDoc, onSnapshot } from "firebase/firestore";
 import { FiCheck, FiX } from "react-icons/fi";
-// import Hi from "../assets/options.svg"
+import {GrAdd} from "react-icons/gr"
+import classes from "../styles/inputstyle.module.css";
 
 function AddVideoModal({ clicked, ytid }) {
   const [videoName, setVideoName] = useState(null);
@@ -77,7 +78,7 @@ function AddVideoModal({ clicked, ytid }) {
             ytid: ytid,
             vid: vid,
             userPhoto: userPhoto,
-            isThumbnail: customThumbnail
+            isThumbnail: customThumbnail,
           },
           { merge: true }
         );
@@ -89,7 +90,7 @@ function AddVideoModal({ clicked, ytid }) {
           ytid: ytid,
           vid: vid,
           userPhoto: userPhoto,
-          isThumbnail: customThumbnail
+          isThumbnail: customThumbnail,
         })
           .then(() => {
             const docRef = doc(db, "users", uid);
@@ -164,26 +165,33 @@ function AddVideoModal({ clicked, ytid }) {
     );
   }
   return (
-    <div className="  fixed bg-white p-6 w-9/12 trans-center top-2/4 left-2/4 border z-20">
+    <div className="fixed bg-white p-6 w-1/2 trans-center top-2/4 left-2/4 border z-20">
+      <FiX onClick={clicked} className="absolute top-1 right-1"/>
       <form className="w-full flex">
-        <div className=" flex flex-col border w-6/12 items-center">
+        <div className=" flex flex-col border-r w-6/12 items-center">
           <input
             type="text"
             placeholder="Video Title"
-            className="border-b"
+            className="border-b outline-none text-sm text-center mb-2"
             onChange={onNameInput}
             required
           />
-          <input
-            onChange={fileInputUpload}
-            className=" border"
-            type="file"
-            name="Add Video"
-            required
-          />
+          <label className={`${classes.label} shadow-md`}>
+            <input
+              onChange={fileInputUpload}
+              // className=" border"
+              type="file"
+              name="Add Video"
+              required
+            />
+            <span className=" flex items-center text-xs font-thin">
+              <p className="mr-1">Select Video</p> 
+            <GrAdd/>
+            </span>
+          </label>
         </div>
-        <div className=" border w-6/12 flex flex-col items-center ">
-          <h1>THUMBNAILS</h1>
+        <div className=" w-6/12 flex flex-col items-center font-thin text-sm">
+          <h1 className="font-bold">THUMBNAILS</h1>
           <div className=" flex items-center">
             <p>Use Default Thumbnail?</p>
             {thumbnailRequestType === "default" ? (
@@ -221,12 +229,24 @@ function AddVideoModal({ clicked, ytid }) {
             )}
           </div>
           {thumbnailRequestType === "custom" ? (
-            <input type="file" onChange={thumbnailFileInput} />
+            <label className={`${classes.label} shadow-md`}>
+            <input
+              onChange={thumbnailFileInput}
+              // className=" border"
+              type="file"
+              name="Add Video"
+              required
+            />
+            <span className=" flex items-center text-xs font-thin">
+              <p className="mr-1">Select Thumbnail Picture</p> 
+            <GrAdd/>
+            </span>
+          </label>
           ) : null}
         </div>
 
         <input
-          className=" absolute bottom-1 right-1"
+          className=" absolute bottom-1 right-1 shadow-sm px-1 border bg-white"
           onClick={onSubmit}
           type="submit"
           value="POST"

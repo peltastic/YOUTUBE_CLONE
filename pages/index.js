@@ -23,7 +23,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header signInStatus={notSignedIn}/>
-      <div className=" flex w-full border">
+      <div className=" flex w-full">
         <Sidebar clicked={checkUser} />
         <VideosContainer />
       </div>

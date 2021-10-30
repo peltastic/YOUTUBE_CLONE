@@ -13,9 +13,9 @@ function Sidebar({clicked}) {
   const {user} = useContext(AuthCheckContext)
   return (
     <div
-      className={`${fullSidebar ? "w11 relative" : "w5"} mr-auto border px-2 transition-all `}
+      className={`${fullSidebar ? "w11 relative" : "w5"} mr-auto px-2 transition-all `}
     >
-      <ul className={`${fullSidebar ? "absolute w-full": "w-40"} `}>
+      <ul className={`${fullSidebar ? "absolute w-full": "w-40"} mt-5`}>
         <li className=" flex justify-start mb-2">
           <Link href="/">
             <a className={`text-lg w-full transition-all ease-our ${fullSidebar ? "translate-x-0": "-translate-x-3/4"} flex items-center `}>

@@ -22,7 +22,7 @@ function VideosContainer() {
     };
   }, []);
   return (
-    <div className="flex border w84 flex-wrap p-6">
+    <div className="flex bg-gray-100 w84 flex-wrap p-6">
       {videosData ? (
         videosData.map((item, index) => {
           return (

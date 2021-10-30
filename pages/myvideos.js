@@ -22,12 +22,14 @@ function myvideos() {
   const [showModal, setShowModal] = useState(false);
   const [videoData, setVideoData] = useState([]);
   const [ytid, setYtid] = useState(null);
+  const [userData, setUserData] = useState(null)
   const [unsubscribed, setUnsubscribed] = useState(null);
   const { uid, userPhoto, user } = useContext(AuthCheckContext);
 
   useEffect(() => {
     if (uid) {
       getUserData();
+      console.log(user)
     }
   }, [uid]);
 
@@ -44,9 +46,11 @@ function myvideos() {
         });
         setVideoData(data);
         console.log(data)
+
       });
       // setUnsubscribed(unsub);
       setYtid(data.ytid);
+      setUserData(data)
       // console.log(videoData.length)
     } else {
       // doc.data() will be undefined in this case
@@ -63,17 +67,19 @@ function myvideos() {
       <Header />
       <div className="flex">
         <Sidebar />
-        <div className="border p-6 w-full relative">
+        <div className=" p-6 w-full relative">
+          <div className=" flex items-center w-full">
           {uid && userPhoto && user ? (
-            <div className=" flex items-end">
+            <div className=" flex items-center mr-auto">
               <Image
-                width={60}
-                height={60}
+                width={40}
+                height={40}
                 src={userPhoto}
-                className="rounded-full"
+                className="rounded-full block mr-6"
               />
-              <div className="">
-                <p>{user.displayName}</p>
+              <div className=" block ml-4">
+                <p className="font-bold">{user.displayName}</p>
+                <p className=" font-thin text-gray-400 text-sm">{`${userData ?userData.videosUploaded : "0"} ${userData?.videosUploaded === 1 ? "Video Uploaded": "Videos Uploaded"}`}</p>
               </div>
             </div>
           ) : (
@@ -81,14 +87,16 @@ function myvideos() {
           )}
           <button
             onClick={() => setShowModal(true)}
-            className="border absolute right-0 top-1/4"
+            className="border p-1 shadow-md"
           >
             Add Video
           </button>
-          <div className="flex border w-full mt-8">
+          </div>
+          
+          <div className="flex w-full border-b mt-8">
             <button>Videos</button>
           </div>
-          <div className="flex w-full border p-2">
+          <div className="flex w-full">
             {/* <VideoPreloader /> */}
             {videoData.length > 0 ? (
               videoData.map((item, index) => (

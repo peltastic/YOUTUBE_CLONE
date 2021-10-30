@@ -54,14 +54,14 @@ function VidThumbnail({
             <a>
               <Image
                 src={userPhoto}
-                width={30}
-                height={30}
+                width={25}
+                height={25}
                 className="rounded-full"
               />
             </a>
           </Link>
         ) : null}
-        <p className={`${userPhoto ? "ml-2" : "mr-auto"} `}>{name}</p>
+        <p className={`${userPhoto ? "ml-2" : "mr-auto"} font-bold text-sm`}>{name}</p>
         {showDeleteModal && ytid && vid && uid ? (
           <DeleteVideo
             ytid={ytid}

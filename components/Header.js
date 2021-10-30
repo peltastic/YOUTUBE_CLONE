@@ -13,7 +13,7 @@ function Header({signInStatus}) {
 
 
   return (
-    <div className="flex items-center px-2 w-full justify-around">
+    <div className="flex items-center px-2 w-full justify-around border-b">
       <Image
         src="https://1.bp.blogspot.com/-qdRfUNOtjkM/XeI_00z9pzI/AAAAAAAAF4E/FeD2SvVFnKUjPAKQ_cNM6-D2ahjKb0HkQCLcBGAsYHQ/s1600/Youtube-Icon-square-2340x2340-2.png"
         width={50}
