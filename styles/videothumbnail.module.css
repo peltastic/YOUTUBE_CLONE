@@ -1,0 +1,24 @@
+.thumbnail {
+  width: 20%;
+}
+
+@media (max-width: 912px) {
+  .thumbnail {
+    width: 27%;
+  }
+}
+@media (max-width: 730px) {
+  .thumbnail {
+    width: 33%;         
+  }
+}
+@media (max-width: 400px) {
+  .thumbnail {
+    width: 75%;         
+  }
+}
+@media (max-width: 350px) {
+  .thumbnail {
+    width: 90%;         
+  }
+}

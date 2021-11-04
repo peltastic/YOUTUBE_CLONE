@@ -1,0 +1,21 @@
+@media (max-width: 650px) {
+  .sidebar {
+    display: none;
+  }
+}
+
+.sidebarMobile {
+    display: none;
+}
+
+@media(max-width: 650px) {
+    .sidebarMobile {
+        display: flex;
+        width: 30%;
+    }
+}
+@media(max-width: 400px) {
+    .sidebarMobile {
+        width: 100%;
+    }
+}

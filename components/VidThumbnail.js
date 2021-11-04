@@ -5,6 +5,7 @@ import Options from "../assets/options.svg";
 import DeleteVideo from "./DeleteVideo";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebaseconfig/firebase";
+import classes from "../styles/videothumbnail.module.css"
 
 function VidThumbnail({
   name,
@@ -34,7 +35,7 @@ function VidThumbnail({
   }, [uid]);
 
   return (
-    <div className="w30 m-5 flex flex-col relative ">
+    <div className={`${classes.thumbnail} m-5 flex flex-col relative `}>
       <Link href={`/videopage/${ytid}?vid=${vid}`}>
         <a className=" w-full border h-28 mb-2 relative bg-gray-700">
           <img

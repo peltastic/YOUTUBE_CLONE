@@ -65,7 +65,7 @@ function myvideos() {
   return (
     <div>
       <Header />
-      <div className="flex">
+      <div className="flex ">
         <Sidebar />
         <div className=" p-6 w-full relative">
           <div className=" flex items-center w-full">

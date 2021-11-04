@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React, { useState, useContext } from "react";
 import { AuthCheckContext } from "./AuthCheck";
+import classes from "../styles/header.module.css"
 
 
 import { SearchIcon } from "@heroicons/react/solid";
@@ -14,13 +15,16 @@ function Header({signInStatus}) {
 
   return (
     <div className="flex items-center px-2 w-full justify-around border-b">
+      <div className={`${classes.logo   } flex items-center`}>
       <Image
         src="https://1.bp.blogspot.com/-qdRfUNOtjkM/XeI_00z9pzI/AAAAAAAAF4E/FeD2SvVFnKUjPAKQ_cNM6-D2ahjKb0HkQCLcBGAsYHQ/s1600/Youtube-Icon-square-2340x2340-2.png"
         width={50}
         height={50}
       />
       <h1 className="font-bold">YOUTUBE</h1>
-      <div className="flex flex-grow items-center mx-64">
+      </div>
+      
+      <div className={`${classes.search} flex flex-grow items-center mx-10 sm:mx-20 md:mx-44 lg:mx-64`}>
         <input
           className=" border-2 w-full px-2 py-1"
           type="search"
@@ -28,6 +32,7 @@ function Header({signInStatus}) {
         />
         <SearchIcon className="h-8 rounded-r-lg border-2" />
       </div>
+        <SearchIcon className={`${classes.searchMobile} h-8`} />
 
       <div className="flex relative">
           {user? <div className={`bg-gray-100 w-20 absolute top-5 right-6 ${signout ? "opacity-1" : "opacity-0"}  transition-all duration-500`}>

@@ -3,6 +3,7 @@ import { db } from "../firebaseconfig/firebase";
 import VidThumbnail from "./VidThumbnail";
 import VideoPreloader from "./VideoPreloader";
 import { onSnapshot, query, collection, where } from "firebase/firestore";
+import classes from "../styles/videocontainer.module.css"
 
 function VideosContainer() {
   const [videosData, setVideosData] = useState(null);
@@ -22,7 +23,7 @@ function VideosContainer() {
     };
   }, []);
   return (
-    <div className="flex bg-gray-100 w84 flex-wrap p-6">
+    <div className={`${classes.vidContainer} flex bg-gray-100 w84 justify-center flex-wrap p-6`}>
       {videosData ? (
         videosData.map((item, index) => {
           return (

@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
 const firebaseConfig = {
-  //your firebase credentials
+//firebase credentials here
 };
 
 const app = initializeApp(firebaseConfig);
