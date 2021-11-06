@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import classes from "../styles/sidebar.module.css";
 import {
   AiFillHome,
@@ -12,20 +13,17 @@ import { AuthCheckContext } from "./AuthCheck";
 function Sidebar({ clicked }) {
   const [fullSidebar, setFullSidebar] = useState(false);
   const { user } = useContext(AuthCheckContext);
+  const router = useRouter();
   return (
     <>
       <div
         className={`${classes.sidebarMobile} fixed left-1/2 -translate-x-1/2 py-2 bottom-0 justify-around z-50 bg-white`}
       >
-        <Link href="/">
-          <AiFillHome className="h-6 w-6" />
-        </Link>
-        <Link href={user ? "/myvideos" : "/"}>
-          <AiOutlinePlaySquare className="h-6 w-6" />
-        </Link>
-        <Link href="/">
-          <MdPlaylistAdd className="h-6 w-6" />
-        </Link>
+        <AiFillHome onClick={() => router.push('/')} className="h-6 w-6" />
+
+        <AiOutlinePlaySquare onClick={() => router.push(`${user? "/myvideos" : "/"}`)} className="h-6 w-6" />
+
+        <MdPlaylistAdd onClick={() => router.push('/')} className="h-6 w-6" />
       </div>
       <div
         className={`${classes.sidebar} ${

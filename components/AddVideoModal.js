@@ -8,6 +8,7 @@ import { doc, setDoc, updateDoc, getDoc, onSnapshot } from "firebase/firestore";
 import { FiCheck, FiX } from "react-icons/fi";
 import { GrAdd } from "react-icons/gr";
 import classes from "../styles/inputstyle.module.css";
+import clases from "../styles/addvideomodal.module.css"
 
 function AddVideoModal({ clicked, ytid }) {
   const [videoName, setVideoName] = useState(null);
@@ -77,7 +78,6 @@ function AddVideoModal({ clicked, ytid }) {
       const storageRef = ref(storage, `${uid}/${vid}`);
       uploadBytes(storageRef, videofile)
         .then(() => {
-          console.log("Uploaded a blob or file!");
           return getDownloadURL(ref(storage, `${uid}/${vid}`));
         })
         .then((url) => {
@@ -106,7 +106,7 @@ function AddVideoModal({ clicked, ytid }) {
           })
             .then(() => {
               const docRef = doc(db, "users", uid);
-              console.log(docRef);
+             
               return updateDoc(docRef, {
                 videosUploaded: videosUploaded + 1,
               });
@@ -136,7 +136,6 @@ function AddVideoModal({ clicked, ytid }) {
     const storageRef = ref(storage, `thumbnails/${vid}`);
     uploadBytes(storageRef, thumbnail)
       .then(() => {
-        console.log("Uploaded thumbnail!");
         return getDownloadURL(ref(storage, `thumbnails/${vid}`));
       })
       .then((url) => {
@@ -194,15 +193,15 @@ function AddVideoModal({ clicked, ytid }) {
   }
   return (
     <>
-      {loadingImage}
+          {loadingImage}
       <div
-        className={`fixed bg-white p-6 w-1/2 trans-center top-2/4 left-2/4 border ${
+        className={`fixed bg-white p-6 w-1/2 trans-center top-2/4 left-2/4 border ${clases.modal} ${
           loading ? "z-5" : "z-20"
         }`}
-      >
+        >
         <FiX onClick={clicked} className="absolute top-1 right-1" />
-        <form className="w-full flex">
-          <div className=" flex flex-col border-r w-6/12 items-center">
+        <form className={`${clases.modalContainer} w-full flex`}>
+          <div className={`${clases.modalblocks} flex flex-col border-r w-6/12 items-center`}>
             <input
               type="text"
               placeholder="Video Title"
@@ -232,7 +231,7 @@ function AddVideoModal({ clicked, ytid }) {
             </label>
             {noVideoError}
           </div>
-          <div className=" w-6/12 flex flex-col items-center font-thin text-sm">
+          <div className={`${clases.modalblocks} w-6/12 flex flex-col items-center font-thin text-sm`}>
             <h1 className="font-bold">THUMBNAILS</h1>
             <div className=" flex items-center">
               <p>Use Default Thumbnail?</p>
@@ -294,10 +293,6 @@ function AddVideoModal({ clicked, ytid }) {
             value="POST"
           />
         </form>
-        {/* <div className=" flex items-center"> */}
-        {/* {loadingImage} */}
-        {/* <Spinner /> */}
-        {/* </div> */}
       </div>
     </>
   );

@@ -23,6 +23,7 @@ import {
 } from "../../Functions/LikesFunction";
 import { AuthCheckContext } from "../../components/AuthCheck";
 import Comment from "../../components/Comment";
+import classes from "../../styles/videopage.module.css"
 
 function VideoPage() {
   const router = useRouter();
@@ -43,9 +44,15 @@ function VideoPage() {
     }
   }, [ytid]);
 
+  useEffect(() => {
+    if(!user) {
+      router.push("/")
+    }
+  }, [user])
+
   useEffect(async () => {
-    if (ytid) {
-      const likesDocRef = doc(db, "likes", ytid);
+    if (vid) {
+      const likesDocRef = doc(db, "likes", vid);
       const likesDocSnap = await getDoc(likesDocRef);
       if (likesDocSnap.exists()) {
         const data = [];
@@ -61,11 +68,11 @@ function VideoPage() {
         setlikesCount(data.length);
       }
     }
-  }, [Userytid, ytid]);
+  }, [Userytid, vid]);
 
   useEffect(async () => {
-    if (ytid) {
-      const dislikesDocRef = doc(db, "dislikes", ytid);
+    if (vid) {
+      const dislikesDocRef = doc(db, "dislikes", vid);
       const dislikesDocSnap = await getDoc(dislikesDocRef);
       if (dislikesDocSnap.exists()) {
         const data = [];
@@ -81,7 +88,7 @@ function VideoPage() {
         setDislikesCount(data.length);
       }
     }
-  }, [Userytid, ytid]);
+  }, [Userytid, vid]);
 
   useEffect(async () => {
     if (vid) {
@@ -115,11 +122,11 @@ function VideoPage() {
   const like = () => {
     if (user) {
       if (liked) {
-        onUnlike(vidData.ytid, Userytid);
+        onUnlike(vidData.vid, Userytid);
         setLiked(!liked);
         setlikesCount(likesCount - 1);
       } else {
-        onLike(vidData.ytid, Userytid);
+        onLike(vidData.vid, Userytid);
         setLiked(!liked);
         setlikesCount(likesCount + 1);
       }
@@ -129,11 +136,11 @@ function VideoPage() {
   const dislike = () => {
     if (user) {
       if (disliked) {
-        onUnDislike(vidData.ytid, Userytid);
+        onUnDislike(vidData.vid, Userytid);
         setDisliked(!disliked);
         setDislikesCount(dislikesCount - 1);
       } else {
-        onDislike(vidData.ytid, Userytid);
+        onDislike(vidData.vid, Userytid);
         setDisliked(!disliked);
         setDislikesCount(dislikesCount + 1);
       }
@@ -165,8 +172,8 @@ function VideoPage() {
   return (
     <div>
       <Header />
-      <div className=" flex w-full">
-        <div className=" flex flex-col w-9/12 px-2">
+      <div className={`${classes.container} flex w-full`}>
+        <div className={`${classes.vidContainer} flex flex-col w-9/12 px-2`}>
           {vidData ? (
             <ReactPlayer
               className=" bg-gray-800"
@@ -197,7 +204,7 @@ function VideoPage() {
             <p className="mr-6">SAVE</p>
           </div>
         </div>
-        <div className="scrollbar border-l border-gray-800 h-90vh w-4/12 px-1 overflow-scroll ">
+        <div className={`${classes.commentsContainer} scrollbar border-l border-gray-800 h-90vh w-4/12 px-1 overflow-scroll` }>
           {comments
             ? comments.map((item, index) => (
                 <Comment
@@ -207,8 +214,9 @@ function VideoPage() {
                   comment={item.comment}
                 />
               ))
-            : null}
-          <div className="absolute bottom-4 w-30n bg-gray-50">
+            : <p className="">No Comments Posted yet</p>
+            }
+          <div className={`${classes.inputContainer} absolute bottom-4 w-30n bg-gray-50`}>
             <input
               type="text"
               onChange={(e) => setCommentInput(e.target.value)}

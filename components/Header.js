@@ -5,11 +5,13 @@ import classes from "../styles/header.module.css"
 
 
 import { SearchIcon } from "@heroicons/react/solid";
+import { IoMdArrowDropdown } from "react-icons/io"
 import {signUserIn, signOutUser} from "../Auth/auth"
+import {deleteUserdata} from "../Functions/DeleteFunctions"
 
 function Header({signInStatus}) {
 
-  const { uid, userPhoto, user } = useContext(AuthCheckContext);
+  const { uid, userPhoto, user, Userytid } = useContext(AuthCheckContext);
   const [signout, setsignout] = useState(false);
 
 
@@ -33,11 +35,12 @@ function Header({signInStatus}) {
         <SearchIcon className="h-8 rounded-r-lg border-2" />
       </div>
         <SearchIcon className={`${classes.searchMobile} h-8`} />
+        < IoMdArrowDropdown onClick={() => setsignout(!signout)} className="mr-4"/>
 
       <div className="flex relative">
-          {user? <div className={`bg-gray-100 w-20 absolute top-5 right-6 ${signout ? "opacity-1" : "opacity-0"}  transition-all duration-500`}>
+          {user? <div className={` z-50 bg-white w-28 py-1 flex flex-col justify-center absolute top-10 right-6 ${signout ? "opacity-1" : "opacity-0"}  transition-all duration-500`}>
             <button
-            className={`text-red-500 font-bold block  m-auto`}
+            className={`text-red-500 font-thin text-sm  block  m-auto`}
             onClick={() => {
               signOutUser();
               setsignout(!signout);
@@ -45,6 +48,7 @@ function Header({signInStatus}) {
           >
             SIGN OUT
           </button>
+          {/* <button onClick={() => Userytid && uid? deleteUserdata(Userytid, uid): null} className="text-xs">Delete Account</button> */}
           </div>: null}
         {uid && userPhoto ? (
           <Image
@@ -52,9 +56,7 @@ function Header({signInStatus}) {
             height={30}
             src={userPhoto}
             className="rounded-full"
-            onClick={() =>{ 
-              setsignout(!signout)
-            }}
+            
           />
         ) : (
           <button

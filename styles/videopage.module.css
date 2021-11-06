@@ -1,0 +1,24 @@
+@media(max-width: 650px) {
+    .container {
+        flex-wrap: wrap;
+    }
+}
+
+@media(max-width: 650px) {
+    .vidContainer {
+        width: 100%;
+    }
+}
+@media(max-width: 650px) {
+    .commentsContainer {
+        width: 100%;
+        position: relative;
+        height: 90vh;
+    }
+}
+
+@media(max-width: 650px) {
+    .inputContainer {
+        width: 100%;
+    }
+}

@@ -15,7 +15,6 @@ function VideosContainer() {
         videos.push(doc.data());
       });
       setVideosData(videos);
-      console.log(videos)
     });
 
     return () => {
@@ -23,7 +22,7 @@ function VideosContainer() {
     };
   }, []);
   return (
-    <div className={`${classes.vidContainer} flex bg-gray-100 w84 justify-center flex-wrap p-6`}>
+    <div className={`${classes.vidContainer} flex bg-gray-100 w84 flex-wrap p-6`}>
       {videosData ? (
         videosData.map((item, index) => {
           return (

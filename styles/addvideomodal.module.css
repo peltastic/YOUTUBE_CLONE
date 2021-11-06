@@ -1,0 +1,22 @@
+@media(max-width: 900px) {
+    .modal {
+        width: 70%;
+    }
+}
+@media(max-width: 600px) {
+    .modal {
+        width: 98%;
+    }
+}
+@media(max-width: 400px) {
+    .modalContainer {
+      flex-direction: column;
+    }
+}
+@media(max-width: 400px) {
+    .modalblocks {
+      width: 100%;
+      border: none;
+      margin-bottom: 1rem;
+    }
+}
