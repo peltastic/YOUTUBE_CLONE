@@ -27,44 +27,46 @@ function myvideos() {
   const [userData, setUserData] = useState(null);
   const [unsubscribed, setUnsubscribed] = useState(null);
   const { uid, userPhoto, user } = useContext(AuthCheckContext);
-  const router = useRouter()
+  const router = useRouter();
 
-  useEffect(() => {
+  useEffect(  async () => {
+    let unsub = null;
     if (uid) {
-      getUserData();
+      const docRef = doc(db, "users", uid);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        const q = query(
+          collection(db, data.ytid),
+          where("isVideo", "==", true)
+        );
+        onSnapshot(q, (querySnapshot) => {
+          const data = [];
+          querySnapshot.forEach((doc) => {
+            data.push(doc.data());
+          });
+          setVideoData(data);
+        });
+        unsub = q;
+        // setUnsubscribed(unsub);
+        setYtid(data.ytid);
+        setUserData(data);
+      } else {
+        // doc.data() will be undefined in this case
+        console.log("No such document!");
+      }
     }
+    return () => {
+      unsub();
+    };
   }, [uid]);
   useEffect(() => {
     if (!user) {
-      router.push("/")
+      router.push("/");
     }
-  }, [user])
+  }, [user]);
 
-  const getUserData = async () => {
-    const docRef = doc(db, "users", uid);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const data = docSnap.data();
-      const q = query(collection(db, data.ytid), where("isVideo", "==", true));
-      onSnapshot(q, (querySnapshot) => {
-        const data = [];
-        querySnapshot.forEach((doc) => {
-          data.push(doc.data());
-        });
-        setVideoData(data);
-      });
-      // setUnsubscribed(unsub);
-      setYtid(data.ytid);
-      setUserData(data);
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("No such document!");
-    }
-
-    // return () => {
-    //   unsub();
-    // };
-  };
+  const getUserData = async () => {};
 
   return (
     <div>

@@ -38,10 +38,19 @@ function VideoPage() {
   const [checkComments, setCheckComments] = useState(false);
   const { Userytid, userPhoto, user } = useContext(AuthCheckContext);
 
-  useEffect(() => {
+  useEffect( async () => {
+    let unsub = null
     if (ytid && vid) {
-      getVidData();
+      const vidRef = collection(db, ytid);
+      const q = query(vidRef, where("vid", "==", `${vid}`));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
+        setVidData(doc.data());
+      });
+      unsub = q
     }
+
+    return () => unsub()
   }, [ytid]);
 
   useEffect(() => {
@@ -91,6 +100,7 @@ function VideoPage() {
   }, [Userytid, vid]);
 
   useEffect(async () => {
+    let unsubscribe = null
     if (vid) {
       const docRef = doc(db, "comments", vid);
       const docSnap = await getDoc(docRef);
@@ -103,21 +113,14 @@ function VideoPage() {
           }
           setComments(data);
         });
+        unsubscribe = unsub
       } else {
-        // doc.data() will be undefined in this case
-        console.log("No such document!");
+        return
       }
     }
+    return () => unsubscribe()
   }, [vid, checkComments]);
 
-  const getVidData = async () => {
-    const vidRef = collection(db, ytid);
-    const q = query(vidRef, where("vid", "==", `${vid}`));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      setVidData(doc.data());
-    });
-  };
 
   const like = () => {
     if (user) {
@@ -183,7 +186,7 @@ function VideoPage() {
               playing={true}
               url={vidData.url}
             />
-          ) : null}
+          ) : <div className=" bg-gray-600 h-80vh w-full"></div>}
           <div className="flex items-center px-2">
             <div className="mr-auto">
               <h1>{vidData?.videoname}</h1>

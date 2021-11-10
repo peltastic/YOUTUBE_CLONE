@@ -34,7 +34,10 @@ body {
   .h-90vh {
     height: 90vh;
   }
-  .w-30n {
+  .h-80vh {
+    height: 80vh;
+  }
+    .w-30n {
     width: 30%;
   }
     .scrollbar::-webkit-scrollbar {
