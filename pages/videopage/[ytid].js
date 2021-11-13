@@ -56,11 +56,11 @@ function VideoPage() {
     };
   }, [ytid, vid]);
 
-  useEffect(() => {
-    if (!user) {
-      router.push("/");
-    }
-  }, [user, router]);
+  // useEffect(() => {
+  //   if (!user) {
+  //     router.push("/");
+  //   }
+  // }, [user, router]);
 
   useEffect(() => {
     const fetchData = async () => {

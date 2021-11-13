@@ -41,20 +41,17 @@ function VidThumbnail({
       <Link href={`/videopage/${ytid}?vid=${vid}`}>
         <a className=" w-full border h-28 mb-2 relative bg-gray-700">
           {thumbnail ? (
-            <Image
+            <img
               src={thumbnail}
               alt=""
-              className=" m-auto"
-              layout="fill"
-              objectFit="contain"
+              className="h-full m-auto"
             />
           ) : (
-            <Image
+            <img
               src="http://pngimg.com/uploads/youtube/youtube_PNG15.png"
               alt=""
-              className=" m-auto"
-              layout="fill"
-              objectFit="contain"
+              className=" h-full m-auto"
+              
             />
           )}
         </a>
