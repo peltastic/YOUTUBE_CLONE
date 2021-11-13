@@ -1,4 +1,4 @@
-@media(max-width: 400px){
+@media(max-width: 600px){
     .search {
         display: none;
     }
@@ -7,14 +7,15 @@
 .searchMobile {
     display: none;
 }
-@media(max-width: 400px){
+@media(max-width: 600px){
     .searchMobile {
         display: block;
         margin-right: 1rem;
+        height: 1.5rem;
     }
 }
 
-@media (max-width: 400px) {
+@media (max-width: 600px) {
     .logo {
         margin-right: auto;
     }

@@ -21,7 +21,10 @@ function Sidebar({ clicked }) {
       >
         <AiFillHome onClick={() => router.push('/')} className="h-6 w-6" />
 
-        <AiOutlinePlaySquare onClick={() => router.push(`${user? "/myvideos" : "/"}`)} className="h-6 w-6" />
+        <AiOutlinePlaySquare onClick={() => {
+          router.push(`${user? "/myvideos" : "/"}`)
+          clicked()
+          }} className="h-6 w-6" />
 
         <MdPlaylistAdd onClick={() => router.push('/')} className="h-6 w-6" />
       </div>

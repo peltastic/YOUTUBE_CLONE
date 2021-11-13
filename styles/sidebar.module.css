@@ -11,7 +11,8 @@
 @media(max-width: 650px) {
     .sidebarMobile {
         display: flex;
-        width: 30%;
+        width: 100%;
+        padding: 1rem 0;
     }
 }
 @media(max-width: 600px) {

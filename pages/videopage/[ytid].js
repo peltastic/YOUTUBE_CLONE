@@ -109,14 +109,18 @@ function VideoPage() {
   }, [Userytid, vid]);
 
   useEffect(() => {
-    const unsub = onSnapshot(doc(db, "comments", vid), (doc) => {
-      const data = [];
-      for (const key in doc.data()) {
-        data.push(doc.data()[key]);
-      }
-      setComments(data);
-    });
-    return () => unsub();
+    if (vid) {
+      const unsub = onSnapshot(doc(db, "comments", vid), (doc) => {
+        const data = [];
+        for (const key in doc.data()) {
+          data.push(doc.data()[key]);
+        }
+        setComments(data);
+      });
+    }
+    return () => {
+      return;
+    };
   }, [vid, checkComments]);
 
   const like = () => {
@@ -175,34 +179,48 @@ function VideoPage() {
       <div className={`${classes.container} flex w-full`}>
         <div className={`${classes.vidContainer} flex flex-col w-9/12 px-2`}>
           {vidData ? (
-            <ReactPlayer
-              className=" bg-gray-800"
-              width="100%"
-              height="80vh"
-              controls={true}
-              playing={true}
-              url={vidData.url}
-            />
+            <>
+              <div className={`${classes.videoPlayer}`}>
+                <ReactPlayer
+                  className={`  bg-gray-800"`}
+                  width="100%"
+                  height="80vh"
+                  controls={true}
+                  playing={true}
+                  url={vidData.url}
+                />
+              </div>
+              <div className={`${classes.videoPlayerMobile}`}>
+                <ReactPlayer
+                  className="bg-gray-800"
+                  width="100%"
+                  height="40vh"
+                  controls={true}
+                  playing={true}
+                  url={vidData.url}
+                />
+              </div>
+            </>
           ) : (
-            <div className=" bg-gray-600 h-80vh w-full"></div>
+            <div className={`${classes.videoPlayerPreloader} bg-gray-600 h-80vh w-full`}></div>
           )}
-          <div className="flex items-center px-2">
-            <div className="mr-auto">
+          <div className="flex flex-wrap items-center px-2 border-b">
+            <div className={`${classes.videoName} mr-auto`}>
               <h1>{vidData?.videoname}</h1>
             </div>
             <button>
               <BiLike
                 onClick={like}
-                className={`mr-1 h-10 w-5 ${liked ? "text-green-600" : null}`}
+                className={`${classes.icons} mr-1 h-10 w-5 ${liked ? "text-green-600" : null}`}
               />
             </button>
             <p className="mr-6 ">{likesCount ? likesCount : "LIKE"}</p>
             <BiDislike
               onClick={dislike}
-              className={`mr-1 h-10 w-5 ${disliked ? "text-red-600" : null}`}
+              className={`${classes.icons} mr-1 h-10 w-5 ${disliked ? "text-red-600" : null}`}
             />
             <p className="mr-6">{dislikesCount ? dislikesCount : "DISLIKE"}</p>
-            <MdOutlinePlaylistAdd className="mr-1 h-10 w-5" />
+            <MdOutlinePlaylistAdd className={`${classes.icons} mr-1 h-10 w-5`} />
             <p className="mr-6">SAVE</p>
           </div>
         </div>

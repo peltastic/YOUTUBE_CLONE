@@ -11,7 +11,7 @@ import {deleteUserdata} from "../Functions/DeleteFunctions"
 
 function Header({signInStatus}) {
 
-  const { uid, userPhoto, user, Userytid } = useContext(AuthCheckContext);
+  const { uid, userPhoto, user } = useContext(AuthCheckContext);
   const [signout, setsignout] = useState(false);
 
 
@@ -36,7 +36,7 @@ function Header({signInStatus}) {
         <SearchIcon className="h-8 rounded-r-lg border-2" />
       </div>
         <SearchIcon className={`${classes.searchMobile} h-8`} />
-        < IoMdArrowDropdown onClick={() => setsignout(!signout)} className="mr-4"/>
+        {user? < IoMdArrowDropdown onClick={() => setsignout(!signout)} className="mr-4"/> : null}
 
       <div className="flex relative">
           {user? <div className={` z-50 bg-white w-28 py-1 flex flex-col justify-center absolute top-10 right-6 ${signout ? "opacity-1" : "opacity-0"}  transition-all duration-500`}>

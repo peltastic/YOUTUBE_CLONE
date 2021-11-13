@@ -12,15 +12,34 @@
     width: 33%;         
   }
 }
-@media (max-width: 600px) {
+@media (max-width: 750px) {
+  .thumbnail {
+    width: 40%; 
+    overflow: hidden;       
+  }
+}
+@media (max-width: 650px) {
+  .thumbnail {
+    width: 80%; 
+    overflow: hidden;    
+    height: 13rem;   
+  }
+}
+
+@media (max-width: 500px) {
   .thumbnail {
     width: 90%; 
     height: 13rem; 
     overflow: hidden;       
   }
 }
+@media (max-width: 400px) {
+  .thumbnail {
+    width: 100%;         
+  }
+}
 
-@media (max-width: 600px) {
+@media (max-width: 650px) {
   .thumbnailImage {
     height: 80%;
   }
