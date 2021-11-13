@@ -20,53 +20,50 @@ import Backdrop from "../components/Backdrop";
 import AddVideoModal from "../components/AddVideoModal";
 import VidThumbnail from "../components/VidThumbnail";
 
-function myvideos() {
+function Myvideos() {
   const [showModal, setShowModal] = useState(false);
   const [videoData, setVideoData] = useState([]);
   const [ytid, setYtid] = useState(null);
   const [userData, setUserData] = useState(null);
-  const [unsubscribed, setUnsubscribed] = useState(null);
   const { uid, userPhoto, user } = useContext(AuthCheckContext);
   const router = useRouter();
 
-  useEffect(  async () => {
-    let unsub = null;
-    if (uid) {
-      const docRef = doc(db, "users", uid);
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        const data = docSnap.data();
-        const q = query(
-          collection(db, data.ytid),
-          where("isVideo", "==", true)
-        );
-        onSnapshot(q, (querySnapshot) => {
-          const data = [];
-          querySnapshot.forEach((doc) => {
-            data.push(doc.data());
+  useEffect(() => {
+    const fetchData = async () => {
+      if (uid) {
+        const docRef = doc(db, "users", uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = docSnap.data();
+          const q = query(
+            collection(db, data.ytid),
+            where("isVideo", "==", true)
+          );
+          onSnapshot(q, (querySnapshot) => {
+            const data = [];
+            querySnapshot.forEach((doc) => {
+              data.push(doc.data());
+            });
+            setVideoData(data);
           });
-          setVideoData(data);
-        });
-        unsub = q;
-        // setUnsubscribed(unsub);
-        setYtid(data.ytid);
-        setUserData(data);
-      } else {
-        // doc.data() will be undefined in this case
-        console.log("No such document!");
+          setYtid(data.ytid);
+          setUserData(data);
+        } else {
+          return;
+        }
       }
-    }
+    };
+    fetchData();
+
     return () => {
-      unsub();
+      return;
     };
   }, [uid]);
   useEffect(() => {
     if (!user) {
       router.push("/");
     }
-  }, [user]);
-
-  const getUserData = async () => {};
+  }, [user, router]);
 
   return (
     <div>
@@ -81,6 +78,7 @@ function myvideos() {
                   width={40}
                   height={40}
                   src={userPhoto}
+                  alt=""
                   className="rounded-full block mr-6"
                 />
                 <div className=" block ml-4">
@@ -146,4 +144,4 @@ function myvideos() {
   );
 }
 
-export default myvideos;
+export default Myvideos;

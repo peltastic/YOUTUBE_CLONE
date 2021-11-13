@@ -19,7 +19,7 @@ import {
 } from "firebase/firestore";
 import { db } from "../../firebaseconfig/firebase";
 import VidThumbnail from "../../components/VidThumbnail";
-import classes from "../../styles/profile.module.css"
+import classes from "../../styles/profile.module.css";
 function Profile() {
   const router = useRouter();
   const { ytid } = router.query;
@@ -32,16 +32,59 @@ function Profile() {
   const { Userytid } = useContext(AuthCheckContext);
 
   useEffect(() => {
-    if (ytid) {
-      getUserData();
-      getSubscribers();
-    }
-  }, [ytid, Userytid]);
-  useEffect(() => {
-    if (ytid) {
-      getSubscribersNo();
+    const fetchData = async () => {
+      if (ytid) {
+        const q = query(collection(db, "users"), where("ytid", "==", ytid));
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach((doc) => {
+          setUserData(doc.data());
+        });
+        const q2 = query(collection(db, ytid), where("isVideo", "==", true));
+        onSnapshot(q2, (querySnapshot) => {
+          const data = [];
+          querySnapshot.forEach((doc) => {
+            data.push(doc.data());
+          });
 
+          setVideoData(data);
+        });
+        const docRef = doc(db, "subscribers", ytid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          const data = [];
+          for (const key in docSnap.data()) {
+            data.push(docSnap.data()[key]);
+          }
+          if (data && Userytid) {
+            let subscriberData;
+            subscriberData = data.filter((val) => val === Userytid);
+            if (subscriberData[0] === Userytid) {
+              setIsSubscribed(true);
+            }
+          }
+        } else {
+          return;
+        }
+      }
+    };
+    fetchData()
+    return () => {
+      return;
     }
+  }, [ytid, Userytid,]);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (ytid) {
+        const docRef = doc(db, "subscribers", ytid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setSubscribersNo(docSnap.data().subscribersNo);
+        } else {
+          console.log("No such document!");
+        }
+      }
+    };
+    fetchData();
   }, [ytid, updateSubCount]);
   useEffect(() => {
     if (ytid === Userytid) {
@@ -51,57 +94,11 @@ function Profile() {
     }
   }, [ytid, Userytid]);
   useEffect(() => {
-   if(!Userytid) {
-     router.push("/")
-   }
-  }, [Userytid])
-
-  const getUserData = async () => {
-    const q = query(collection(db, "users"), where("ytid", "==", ytid));
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => {
-      setUserData(doc.data());
-    });
-    const q2 = query(collection(db, ytid), where("isVideo", "==", true));
-    onSnapshot(q2, (querySnapshot) => {
-      const data = [];
-      querySnapshot.forEach((doc) => {
-        data.push(doc.data());
-      });
-
-      setVideoData(data);
-    });
-  };
-
-  const getSubscribersNo = async () => {
-    const docRef = doc(db, "subscribers", ytid);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      setSubscribersNo(docSnap.data().subscribersNo);
-    } else {
-      console.log("No such document!");
+    if (!Userytid) {
+      router.push("/");
     }
-  };
+  }, [Userytid, router]);
 
-  const getSubscribers = async () => {
-    const docRef = doc(db, "subscribers", ytid);
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      const data = [];
-      for (const key in docSnap.data()) {
-        data.push(docSnap.data()[key]);
-      }
-      if (data && Userytid) {
-        let subscriberData;
-        subscriberData = data.filter((val) => val === Userytid);
-        if (subscriberData[0] === Userytid) {
-          setIsSubscribed(true);
-        }
-      }
-    } else {
-      return;
-    }
-  };
 
   const onSubscribe = async () => {
     setIsSubscribed(!isSubscribed);
@@ -145,11 +142,14 @@ function Profile() {
                 width={40}
                 height={40}
                 src={userData.profilepic}
+                alt=""
                 className="rounded-full"
               />
               <div className="flex flex-col ml-1">
                 <p className="font-bold">{userData.username}</p>
-                <p className="text-xs font-thin">{`${subscribersNo} ${subscribersNo === 1? "subscriber": "subscribers"}`}</p>
+                <p className="text-xs font-thin">{`${subscribersNo} ${
+                  subscribersNo === 1 ? "subscriber" : "subscribers"
+                }`}</p>
               </div>
               {isUser ? null : (
                 <button
@@ -162,13 +162,13 @@ function Profile() {
             </div>
           ) : (
             <div className=" flex items-center mr-auto animate-pulse duration-75">
-                <div className="h-12 w-12 rounded-full bg-gray-100"></div>
+              <div className="h-12 w-12 rounded-full bg-gray-100"></div>
 
-                <div className=" block ml-4">
-                  <div className="h-4 bg-gray-100 w-24 mb-2"></div>
-                  <div className="h-4 bg-gray-100 w-24"></div>
-                </div>
+              <div className=" block ml-4">
+                <div className="h-4 bg-gray-100 w-24 mb-2"></div>
+                <div className="h-4 bg-gray-100 w-24"></div>
               </div>
+            </div>
           )}
           <div className="flex border-b w-full mt-8">
             <button>Videos</button>
@@ -182,8 +182,7 @@ function Profile() {
                   vidUrl={item.url}
                   ytid={ytid}
                   vid={item.vid}
-              thumbnail={item.thumbnail}
-
+                  thumbnail={item.thumbnail}
                 />
               ))
             ) : (

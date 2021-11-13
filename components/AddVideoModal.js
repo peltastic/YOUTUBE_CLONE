@@ -8,7 +8,7 @@ import { doc, setDoc, updateDoc, getDoc, onSnapshot } from "firebase/firestore";
 import { FiCheck, FiX } from "react-icons/fi";
 import { GrAdd } from "react-icons/gr";
 import classes from "../styles/inputstyle.module.css";
-import clases from "../styles/addvideomodal.module.css"
+import clases from "../styles/addvideomodal.module.css";
 
 function AddVideoModal({ clicked, ytid }) {
   const [videoName, setVideoName] = useState(null);
@@ -25,12 +25,22 @@ function AddVideoModal({ clicked, ytid }) {
   const [isVideoFile, setIsVideoFile] = useState("notyet");
 
   useEffect(() => {
-    getUserData();
+    const fetchData = async () => {
+      const docRef = doc(db, "users", uid);
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        setVideosUploaded(docSnap.data().videosUploaded);
+      } else {
+        return;
+      }
+    };
+    fetchData();
 
     return () => {
       setLoading(!loading);
     };
-  }, [uid]);
+  }, [uid, loading]);
 
   const fileInputUpload = (e) => {
     const file = e.target.files[0];
@@ -44,20 +54,6 @@ function AddVideoModal({ clicked, ytid }) {
   const thumbnailFileInput = (e) => {
     const file = e.target.files[0];
     setThumbnail(file);
-  };
-
-  const getUserData = async () => {
-    const docRef = doc(db, "users", uid);
-    const docSnap = await getDoc(docRef);
-    // const data = await docSnap.json()
-    // console.log(data)
-
-    if (docSnap.exists()) {
-      setVideosUploaded(docSnap.data().videosUploaded);
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("No such document!");
-    }
   };
 
   const onNameInput = (e) => {
@@ -106,7 +102,7 @@ function AddVideoModal({ clicked, ytid }) {
           })
             .then(() => {
               const docRef = doc(db, "users", uid);
-             
+
               return updateDoc(docRef, {
                 videosUploaded: videosUploaded + 1,
               });
@@ -193,15 +189,17 @@ function AddVideoModal({ clicked, ytid }) {
   }
   return (
     <>
-          {loadingImage}
+      {loadingImage}
       <div
-        className={`fixed bg-white p-6 w-1/2 trans-center top-2/4 left-2/4 border ${clases.modal} ${
-          loading ? "z-5" : "z-20"
-        }`}
-        >
+        className={`fixed bg-white p-6 w-1/2 trans-center top-2/4 left-2/4 border ${
+          clases.modal
+        } ${loading ? "z-5" : "z-20"}`}
+      >
         <FiX onClick={clicked} className="absolute top-1 right-1" />
         <form className={`${clases.modalContainer} w-full flex`}>
-          <div className={`${clases.modalblocks} flex flex-col border-r w-6/12 items-center`}>
+          <div
+            className={`${clases.modalblocks} flex flex-col border-r w-6/12 items-center`}
+          >
             <input
               type="text"
               placeholder="Video Title"
@@ -231,7 +229,9 @@ function AddVideoModal({ clicked, ytid }) {
             </label>
             {noVideoError}
           </div>
-          <div className={`${clases.modalblocks} w-6/12 flex flex-col items-center font-thin text-sm`}>
+          <div
+            className={`${clases.modalblocks} w-6/12 flex flex-col items-center font-thin text-sm`}
+          >
             <h1 className="font-bold">THUMBNAILS</h1>
             <div className=" flex items-center">
               <p>Use Default Thumbnail?</p>

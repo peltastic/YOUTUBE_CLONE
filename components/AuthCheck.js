@@ -26,7 +26,7 @@ export const AuthCheckProvider = ({ children }) => {
         setYtid(null)
       }
     });
-  }, [uid]);
+  }, [uid, auth]);
 
   const getUserData = async (uid) => {
     const docRef = doc(db, "users", uid);

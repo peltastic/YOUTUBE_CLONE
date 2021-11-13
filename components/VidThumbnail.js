@@ -5,7 +5,7 @@ import Options from "../assets/options.svg";
 import DeleteVideo from "./DeleteVideo";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebaseconfig/firebase";
-import classes from "../styles/videothumbnail.module.css"
+import classes from "../styles/videothumbnail.module.css";
 
 function VidThumbnail({
   name,
@@ -15,38 +15,48 @@ function VidThumbnail({
   showDelete,
   uid,
   thumbnail,
-  IsThumbnail
+  IsThumbnail,
 }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userData, setUserData] = useState(null);
-  const [thumbnailImage, setThumbnailImage] = useState(null);
 
-  useEffect(async () => {
-    if (uid) {
-      const docRef = doc(db, "users", uid);
-      const docSnap = await getDoc(docRef);
+  useEffect(() => {
+    const fetchData = async () => {
+      if (uid) {
+        const docRef = doc(db, "users", uid);
+        const docSnap = await getDoc(docRef);
 
-      if (docSnap.exists()) {
-        setUserData(docSnap.data().videosUploaded);
-      } else {
-        console.log("No such document!");
+        if (docSnap.exists()) {
+          setUserData(docSnap.data().videosUploaded);
+        } else {
+          return;
+        }
       }
-    }
+    };
+    fetchData();
   }, [uid]);
 
   return (
     <div className={`${classes.thumbnail} m-5 flex flex-col relative `}>
       <Link href={`/videopage/${ytid}?vid=${vid}`}>
         <a className=" w-full border h-28 mb-2 relative bg-gray-700">
-          <img
-            src={
-              thumbnail
-                ? thumbnail
-                : "http://pngimg.com/uploads/youtube/youtube_PNG15.png"
-            }
-            alt=""
-            className="h-full m-auto"
-          />
+          {thumbnail ? (
+            <Image
+              src={thumbnail}
+              alt=""
+              className=" m-auto"
+              layout="fill"
+              objectFit="contain"
+            />
+          ) : (
+            <Image
+              src="http://pngimg.com/uploads/youtube/youtube_PNG15.png"
+              alt=""
+              className=" m-auto"
+              layout="fill"
+              objectFit="contain"
+            />
+          )}
         </a>
       </Link>
       <div className=" flex items-center">
@@ -58,11 +68,14 @@ function VidThumbnail({
                 width={25}
                 height={25}
                 className="rounded-full"
+                alt=""
               />
             </a>
           </Link>
         ) : null}
-        <p className={`${userPhoto ? "ml-2" : "mr-auto"} font-bold text-sm`}>{name}</p>
+        <p className={`${userPhoto ? "ml-2" : "mr-auto"} font-bold text-sm`}>
+          {name}
+        </p>
         {showDeleteModal && ytid && vid && uid ? (
           <DeleteVideo
             ytid={ytid}
@@ -79,6 +92,7 @@ function VidThumbnail({
             src={Options}
             width={15}
             height={15}
+            alt=""
           />
         ) : null}
       </div>

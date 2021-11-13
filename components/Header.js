@@ -22,6 +22,7 @@ function Header({signInStatus}) {
         src="https://1.bp.blogspot.com/-qdRfUNOtjkM/XeI_00z9pzI/AAAAAAAAF4E/FeD2SvVFnKUjPAKQ_cNM6-D2ahjKb0HkQCLcBGAsYHQ/s1600/Youtube-Icon-square-2340x2340-2.png"
         width={50}
         height={50}
+        alt=""
       />
       <h1 className="font-bold">YOUTUBE</h1>
       </div>
@@ -48,13 +49,13 @@ function Header({signInStatus}) {
           >
             SIGN OUT
           </button>
-          {/* <button onClick={() => Userytid && uid? deleteUserdata(Userytid, uid): null} className="text-xs">Delete Account</button> */}
           </div>: null}
         {uid && userPhoto ? (
           <Image
             width={30}
             height={30}
             src={userPhoto}
+            alt=""
             className="rounded-full"
             
           />

@@ -4,7 +4,8 @@ module.exports = {
     domains: [
       "1.bp.blogspot.com",
       "lh3.googleusercontent.com",
-      "pngimg.com"
+      "pngimg.com",
+      "firebasestorage.googleapis.com"
     ]
   }
 }

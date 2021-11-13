@@ -23,7 +23,7 @@ import {
 } from "../../Functions/LikesFunction";
 import { AuthCheckContext } from "../../components/AuthCheck";
 import Comment from "../../components/Comment";
-import classes from "../../styles/videopage.module.css"
+import classes from "../../styles/videopage.module.css";
 
 function VideoPage() {
   const router = useRouter();
@@ -34,93 +34,90 @@ function VideoPage() {
   const [likesCount, setlikesCount] = useState(null);
   const [dislikesCount, setDislikesCount] = useState(null);
   const [commentInput, setCommentInput] = useState("");
-  const [comments, setComments] = useState(null);
+  const [comments, setComments] = useState([]);
   const [checkComments, setCheckComments] = useState(false);
   const { Userytid, userPhoto, user } = useContext(AuthCheckContext);
 
-  useEffect( async () => {
-    let unsub = null
-    if (ytid && vid) {
-      const vidRef = collection(db, ytid);
-      const q = query(vidRef, where("vid", "==", `${vid}`));
-      const querySnapshot = await getDocs(q);
-      querySnapshot.forEach((doc) => {
-        setVidData(doc.data());
-      });
-      unsub = q
-    }
+  useEffect(() => {
+    const fetchData = async () => {
+      if (ytid && vid) {
+        const vidRef = collection(db, ytid);
+        const q = query(vidRef, where("vid", "==", `${vid}`));
+        const querySnapshot = await getDocs(q);
+        const unsub = querySnapshot.forEach((doc) => {
+          setVidData(doc.data());
+        });
+      }
+    };
+    fetchData();
 
-    return () => unsub()
-  }, [ytid]);
+    return () => {
+      return;
+    };
+  }, [ytid, vid]);
 
   useEffect(() => {
-    if(!user) {
-      router.push("/")
+    if (!user) {
+      router.push("/");
     }
-  }, [user])
+  }, [user, router]);
 
-  useEffect(async () => {
-    if (vid) {
-      const likesDocRef = doc(db, "likes", vid);
-      const likesDocSnap = await getDoc(likesDocRef);
-      if (likesDocSnap.exists()) {
-        const data = [];
-        for (const key in likesDocSnap.data()) {
-          data.push(likesDocSnap.data()[key]);
-        }
-        const likedBy = data.filter((el) => el === Userytid);
-        if (likedBy[0] === Userytid) {
-          setLiked(true);
-        } else {
-          setLiked(false);
-        }
-        setlikesCount(data.length);
-      }
-    }
-  }, [Userytid, vid]);
-
-  useEffect(async () => {
-    if (vid) {
-      const dislikesDocRef = doc(db, "dislikes", vid);
-      const dislikesDocSnap = await getDoc(dislikesDocRef);
-      if (dislikesDocSnap.exists()) {
-        const data = [];
-        for (const key in dislikesDocSnap.data()) {
-          data.push(dislikesDocSnap.data()[key]);
-        }
-        const dislikedBy = data.filter((el) => el === Userytid);
-        if (dislikedBy[0] === Userytid) {
-          setDisliked(true);
-        } else {
-          setDisliked(false);
-        }
-        setDislikesCount(data.length);
-      }
-    }
-  }, [Userytid, vid]);
-
-  useEffect(async () => {
-    let unsubscribe = null
-    if (vid) {
-      const docRef = doc(db, "comments", vid);
-      const docSnap = await getDoc(docRef);
-
-      if (docSnap.exists()) {
-        const unsub = onSnapshot(doc(db, "comments", vid), (doc) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      if (vid) {
+        const likesDocRef = doc(db, "likes", vid);
+        const likesDocSnap = await getDoc(likesDocRef);
+        if (likesDocSnap.exists()) {
           const data = [];
-          for (const key in doc.data()) {
-            data.push(doc.data()[key]);
+          for (const key in likesDocSnap.data()) {
+            data.push(likesDocSnap.data()[key]);
           }
-          setComments(data);
-        });
-        unsubscribe = unsub
-      } else {
-        return
+          const likedBy = data.filter((el) => el === Userytid);
+          if (likedBy[0] === Userytid) {
+            setLiked(true);
+          } else {
+            setLiked(false);
+          }
+          setlikesCount(data.length);
+        }
       }
-    }
-    return () => unsubscribe()
-  }, [vid, checkComments]);
+    };
+    fetchData();
+  }, [Userytid, vid]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (vid) {
+        const dislikesDocRef = doc(db, "dislikes", vid);
+        const dislikesDocSnap = await getDoc(dislikesDocRef);
+        if (dislikesDocSnap.exists()) {
+          const data = [];
+          for (const key in dislikesDocSnap.data()) {
+            data.push(dislikesDocSnap.data()[key]);
+          }
+          const dislikedBy = data.filter((el) => el === Userytid);
+          if (dislikedBy[0] === Userytid) {
+            setDisliked(true);
+          } else {
+            setDisliked(false);
+          }
+          setDislikesCount(data.length);
+        }
+      }
+    };
+    fetchData();
+  }, [Userytid, vid]);
+
+  useEffect(() => {
+    const unsub = onSnapshot(doc(db, "comments", vid), (doc) => {
+      const data = [];
+      for (const key in doc.data()) {
+        data.push(doc.data()[key]);
+      }
+      setComments(data);
+    });
+    return () => unsub();
+  }, [vid, checkComments]);
 
   const like = () => {
     if (user) {
@@ -186,7 +183,9 @@ function VideoPage() {
               playing={true}
               url={vidData.url}
             />
-          ) : <div className=" bg-gray-600 h-80vh w-full"></div>}
+          ) : (
+            <div className=" bg-gray-600 h-80vh w-full"></div>
+          )}
           <div className="flex items-center px-2">
             <div className="mr-auto">
               <h1>{vidData?.videoname}</h1>
@@ -207,19 +206,24 @@ function VideoPage() {
             <p className="mr-6">SAVE</p>
           </div>
         </div>
-        <div className={`${classes.commentsContainer} scrollbar border-l border-gray-800 h-90vh w-4/12 px-1 overflow-scroll` }>
-          {comments
-            ? comments.map((item, index) => (
-                <Comment
-                  key={index}
-                  userName={item.name}
-                  userPic={item.UserPhoto}
-                  comment={item.comment}
-                />
-              ))
-            : <p className="">No Comments Posted yet</p>
-            }
-          <div className={`${classes.inputContainer} absolute bottom-4 w-30n bg-gray-50`}>
+        <div
+          className={`${classes.commentsContainer} scrollbar border-l border-gray-800 h-90vh w-4/12 px-1 overflow-scroll`}
+        >
+          {comments.length > 0 ? (
+            comments.map((item, index) => (
+              <Comment
+                key={index}
+                userName={item.name}
+                userPic={item.UserPhoto}
+                comment={item.comment}
+              />
+            ))
+          ) : (
+            <p className="">No Comments Posted yet</p>
+          )}
+          <div
+            className={`${classes.inputContainer} absolute bottom-4 w-30n bg-gray-50`}
+          >
             <input
               type="text"
               onChange={(e) => setCommentInput(e.target.value)}
