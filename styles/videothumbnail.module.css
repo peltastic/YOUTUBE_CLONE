@@ -12,13 +12,16 @@
     width: 33%;         
   }
 }
-@media (max-width: 400px) {
+@media (max-width: 600px) {
   .thumbnail {
-    width: 75%;         
+    width: 90%; 
+    height: 13rem; 
+    overflow: hidden;       
   }
 }
-@media (max-width: 350px) {
-  .thumbnail {
-    width: 90%;         
+
+@media (max-width: 600px) {
+  .thumbnailImage {
+    height: 80%;
   }
 }

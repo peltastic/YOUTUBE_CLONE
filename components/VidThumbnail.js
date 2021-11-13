@@ -39,7 +39,7 @@ function VidThumbnail({
   return (
     <div className={`${classes.thumbnail} m-5 flex flex-col relative `}>
       <Link href={`/videopage/${ytid}?vid=${vid}`}>
-        <a className=" w-full border h-28 mb-2 relative bg-gray-700">
+        <a className={`${classes.thumbnailImage} w-full border h-28 mb-2 relative bg-gray-700`}>
           {thumbnail ? (
             <img
               src={thumbnail}
