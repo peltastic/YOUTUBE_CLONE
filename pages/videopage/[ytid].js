@@ -180,9 +180,9 @@ function VideoPage() {
         <div className={`${classes.vidContainer} flex flex-col w-9/12 px-2`}>
           {vidData ? (
             <>
-              <div className={`${classes.videoPlayer}`}>
+              <div>
                 <ReactPlayer
-                  className={`  bg-gray-800"`}
+                  className={`bg-gray-800" ${classes.videoPlayer}`}
                   width="100%"
                   height="80vh"
                   controls={true}
@@ -190,9 +190,9 @@ function VideoPage() {
                   url={vidData.url}
                 />
               </div>
-              <div className={`${classes.videoPlayerMobile}`}>
+              <div >
                 <ReactPlayer
-                  className="bg-gray-800"
+                  className={`bg-gray-800 ${classes.videoPlayerMobile}`}
                   width="100%"
                   height="40vh"
                   controls={true}
