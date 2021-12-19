@@ -179,30 +179,20 @@ function VideoPage() {
       <div className={`${classes.container} flex w-full`}>
         <div className={`${classes.vidContainer} flex flex-col w-9/12 px-2`}>
           {vidData ? (
-            <>
-              <div>
-                <ReactPlayer
-                  className={`bg-gray-800" ${classes.videoPlayer}`}
-                  width="100%"
-                  height="80vh"
-                  controls={true}
-                  playing={true}
-                  url={vidData.url}
-                />
-              </div>
-              <div >
-                <ReactPlayer
-                  className={`bg-gray-800 ${classes.videoPlayerMobile}`}
-                  width="100%"
-                  height="40vh"
-                  controls={true}
-                  playing={true}
-                  url={vidData.url}
-                />
-              </div>
-            </>
+            <div className={`${classes.videoPlayer}`}>
+              <ReactPlayer
+                className={`bg-gray-800" ${classes.videoPlayer}`}
+                width="100%"
+                height="100%"
+                controls={true}
+                playing={true}
+                url={vidData.url}
+              />
+            </div>
           ) : (
-            <div className={`${classes.videoPlayerPreloader} bg-gray-600 h-80vh w-full`}></div>
+            <div
+              className={`${classes.videoPlayerPreloader} bg-gray-600 h-80vh w-full`}
+            ></div>
           )}
           <div className="flex flex-wrap items-center px-2 border-b">
             <div className={`${classes.videoName} mr-auto`}>
@@ -211,16 +201,22 @@ function VideoPage() {
             <button>
               <BiLike
                 onClick={like}
-                className={`${classes.icons} mr-1 h-10 w-5 ${liked ? "text-green-600" : null}`}
+                className={`${classes.icons} mr-1 h-10 w-5 ${
+                  liked ? "text-green-600" : null
+                }`}
               />
             </button>
             <p className="mr-6 ">{likesCount ? likesCount : "LIKE"}</p>
             <BiDislike
               onClick={dislike}
-              className={`${classes.icons} mr-1 h-10 w-5 ${disliked ? "text-red-600" : null}`}
+              className={`${classes.icons} mr-1 h-10 w-5 ${
+                disliked ? "text-red-600" : null
+              }`}
             />
             <p className="mr-6">{dislikesCount ? dislikesCount : "DISLIKE"}</p>
-            <MdOutlinePlaylistAdd className={`${classes.icons} mr-1 h-10 w-5`} />
+            <MdOutlinePlaylistAdd
+              className={`${classes.icons} mr-1 h-10 w-5`}
+            />
             <p className="mr-6">SAVE</p>
           </div>
         </div>

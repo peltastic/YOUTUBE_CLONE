@@ -1,58 +1,54 @@
-@media(max-width: 900px) {
-    .container {
-        flex-wrap: wrap;
-    }
-}
-
-@media(max-width: 900px) {
-    .vidContainer {
-        width: 100%;
-    }
-}
-
-@media(max-width: 900px) {
-    .videoPlayer {
-        display: none;
-    }
-}
-.videoPlayerMobile {
-    display: none;
-}
-
-@media(max-width: 900px) {
-    .videoPlayerMobile {
-        display: block;
-    }
-}
 @media (max-width: 900px) {
-    .videoPlayerPreloader {
-        height: 40vh;
-    }
-}
-@media(max-width: 650px) {
-    .commentsContainer {
-        width: 100%;
-        position: relative;
-        height: 50vh;
-    }
+  .container {
+    flex-wrap: wrap;
+  }
 }
 
-@media(max-width: 900px) {
-    .inputContainer {
-        width: 100%;
-    }
+@media (max-width: 900px) {
+  .vidContainer {
+    width: 100%;
+  }
+}
+
+.videoPlayer {
+  height: 80vh;
+  width: 100%;
+}
+
+@media (max-width: 900px) {
+  .videoPlayer {
+    height: 40vh;
+  }
+}
+
+@media (max-width: 900px) {
+  .videoPlayerPreloader {
+    height: 40vh;
+  }
+}
+@media (max-width: 650px) {
+  .commentsContainer {
+    width: 100%;
+    position: relative;
+    height: 50vh;
+  }
+}
+
+@media (max-width: 900px) {
+  .inputContainer {
+    width: 100%;
+  }
 }
 
 @media (max-width: 650px) {
-    .videoName {
-        width: 100%;
-        font-size: 1.1rem;
-    }
+  .videoName {
+    width: 100%;
+    font-size: 1.1rem;
+  }
 }
 
-
-@media(max-width: 650px) {
-    .icons {
-        width: 1.2rem;
-    }
+@media (max-width: 650px) {
+  .icons {
+    width: 1.2rem;
+  }
 }
