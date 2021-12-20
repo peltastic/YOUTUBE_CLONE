@@ -1,0 +1,21 @@
+@media(max-width: 900px) {
+    .flexItems {
+        width: 100%;
+    }
+}
+
+@media(max-width: 650px) {
+    .flexItems {
+        justify-content: center;
+    }   
+}
+
+@media(max-width: 900px) {
+    .bioContainer {
+        border-bottom: .5px solid gray;
+        width: 50%;
+        margin: auto;
+        margin-top: 1rem;
+        padding: 1rem 0;
+    }
+}

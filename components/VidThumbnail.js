@@ -16,6 +16,7 @@ function VidThumbnail({
   uid,
   thumbnail,
   IsThumbnail,
+
 }) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [userData, setUserData] = useState(null);

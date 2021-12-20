@@ -9,12 +9,15 @@ import {
   getDoc,
   setDoc,
   onSnapshot,
+  updateDoc,
+  deleteField,
 } from "firebase/firestore";
 import { db } from "../../firebaseconfig/firebase";
 import Header from "../../components/Header";
 import ReactPlayer from "react-player";
 import { BiLike, BiDislike } from "react-icons/bi";
 import { MdOutlinePlaylistAdd } from "react-icons/md";
+import { AiOutlinePlaySquare } from "react-icons/ai";
 import {
   onLike,
   onUnlike,
@@ -36,6 +39,7 @@ function VideoPage() {
   const [commentInput, setCommentInput] = useState("");
   const [comments, setComments] = useState([]);
   const [checkComments, setCheckComments] = useState(false);
+  const [isPlaylist, setIsPlaylist] = useState(false);
   const { Userytid, userPhoto, user } = useContext(AuthCheckContext);
 
   useEffect(() => {
@@ -56,11 +60,28 @@ function VideoPage() {
     };
   }, [ytid, vid]);
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     router.push("/");
-  //   }
-  // }, [user, router]);
+  useEffect(() => {
+    const fetchdata = async () => {
+      if (Userytid && vid) {
+        const playlistRef = doc(db, "playlist", Userytid);
+        const playlistDocSnap = await getDoc(playlistRef);
+        if (playlistDocSnap.exists()) {
+          const data = [];
+          for (const key in playlistDocSnap.data()) {
+            data.push(playlistDocSnap.data()[key]);
+          }
+          const isSaved = data.filter((el) => vid === el.vid);
+          if (isSaved.length > 0) {
+            setIsPlaylist(true);
+          } else {
+            setIsPlaylist(false);
+          }
+          console.log(isSaved);
+        }
+      }
+    };
+    fetchdata();
+  }, [Userytid, vid]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -173,15 +194,38 @@ function VideoPage() {
     }
   };
 
+  const addVidToPlaylisitHandler = async () => {
+    if (isPlaylist) {
+      if (Userytid && vidData) {
+        const playlistRef = doc(db, "playlist", Userytid);
+        await updateDoc(playlistRef, {
+          [vidData.vid]: deleteField(),
+        });
+      }
+    } else {
+      if (Userytid && vidData) {
+        await setDoc(
+          doc(db, "playlist", Userytid),
+          {
+            [vidData.vid]: {
+              ...vidData,
+            },
+          },
+          { merge: true }
+          );
+        }
+      }
+      setIsPlaylist(!isPlaylist);
+  };
+
   return (
     <div>
       <Header />
       <div className={`${classes.container} flex w-full`}>
         <div className={`${classes.vidContainer} flex flex-col w-9/12 px-2`}>
           {vidData ? (
-            <div className={`${classes.videoPlayer}`}>
+            <div className={` bg-gray-800 ${classes.videoPlayer}`}>
               <ReactPlayer
-                className={`bg-gray-800" ${classes.videoPlayer}`}
                 width="100%"
                 height="100%"
                 controls={true}
@@ -214,10 +258,21 @@ function VideoPage() {
               }`}
             />
             <p className="mr-6">{dislikesCount ? dislikesCount : "DISLIKE"}</p>
-            <MdOutlinePlaylistAdd
-              className={`${classes.icons} mr-1 h-10 w-5`}
-            />
-            <p className="mr-6">SAVE</p>
+            {!isPlaylist ? (
+              <MdOutlinePlaylistAdd
+                className={`${classes.icons} mr-1 h-10 w-5`}
+              />
+            ) : (
+              <AiOutlinePlaySquare
+                className={`${classes.icons} mr-1 h-10 w-5 text-green-600`}
+              />
+            )}
+            <p
+              className={`mr-6 cursor-pointer ${isPlaylist ? "text-green-600" : "text-black"}`}
+              onClick={addVidToPlaylisitHandler}
+            >
+              {isPlaylist ? "SAVED" : "SAVE"}
+            </p>
           </div>
         </div>
         <div

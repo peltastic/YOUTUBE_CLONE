@@ -26,7 +26,7 @@ function Sidebar({ clicked }) {
           clicked()
           }} className="h-6 w-6" />
 
-        <MdPlaylistAdd onClick={() => router.push('/')} className="h-6 w-6" />
+        <MdPlaylistAdd onClick={() => router.push('/playlist')} className="h-6 w-6" />
       </div>
       <div
         className={`${classes.sidebar} ${
@@ -60,7 +60,7 @@ function Sidebar({ clicked }) {
             </Link>
           </li>
           <li className=" flex justify-start mb-2">
-            <Link className="" href="/">
+            <Link className="" href="/playlist">
               <a
                 onClick={clicked}
                 className={`text-lg w-full transition-all ease-our ${
