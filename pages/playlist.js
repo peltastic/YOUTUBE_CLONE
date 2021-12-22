@@ -8,7 +8,7 @@ import { db } from "../firebaseconfig/firebase";
 import VidThumbnail from "../components/VidThumbnail";
 import classes from "../styles/playlist.module.css";
 
-function playlist() {
+function Playlist() {
   const { Userytid, userPhoto, user } = useContext(AuthCheckContext);
   const [playlistData, setplaylistData] = useState([]);
 
@@ -84,4 +84,4 @@ function playlist() {
   );
 }
 
-export default playlist;
+export default Playlist;
