@@ -19,14 +19,20 @@ function Sidebar({ clicked }) {
       <div
         className={`${classes.sidebarMobile} fixed left-1/2 -translate-x-1/2 py-2 bottom-0 justify-around z-50 bg-white`}
       >
-        <AiFillHome onClick={() => router.push('/')} className="h-6 w-6" />
+        <AiFillHome onClick={() => router.push("/")} className="h-6 w-6" />
 
-        <AiOutlinePlaySquare onClick={() => {
-          router.push(`${user? "/myvideos" : "/"}`)
-          clicked()
-          }} className="h-6 w-6" />
+        <AiOutlinePlaySquare
+          onClick={() => {
+            router.push(`${user ? "/myvideos" : "/"}`);
+            clicked();
+          }}
+          className="h-6 w-6"
+        />
 
-        <MdPlaylistAdd onClick={() => router.push('/playlist')} className="h-6 w-6" />
+        <MdPlaylistAdd
+          onClick={() => router.push(`${user ? "/playlist" : "/"}`)}
+          className="h-6 w-6"
+        />
       </div>
       <div
         className={`${classes.sidebar} ${
@@ -60,7 +66,7 @@ function Sidebar({ clicked }) {
             </Link>
           </li>
           <li className=" flex justify-start mb-2">
-            <Link className="" href="/playlist">
+            <Link className="" href={user ? "/playlist" : "/"}>
               <a
                 onClick={clicked}
                 className={`text-lg w-full transition-all ease-our ${
