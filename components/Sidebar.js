@@ -74,7 +74,7 @@ function Sidebar({ clicked }) {
                 } flex items-center `}
               >
                 <p className="text-gray-500 font-light mr-auto">Playlist</p>
-                <MdPlaylistAdd className=" h-6 w-6 mr-3 " />
+                <MdPlaylistAdd className="h-6 w-6 mr-3" />
               </a>
             </Link>
           </li>
